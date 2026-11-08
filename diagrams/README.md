@@ -21,6 +21,10 @@ gallery card's text.
 How the edge on a PC and the cloud work together.
 
 - [How the Mediathek works](../diagrams/overview-how-it-works.html): from the sources on the PC through the edge to the shared store and the Library, and what never leaves the PC.
+- [From a folder to the Library](../diagrams/e2e-folder-to-library.html): how one file is fetched and hashed on the PC, uploaded with a checksum S3 enforces, registered, and shown through a per-vault CDN policy.
+- [Linking an edge](../diagrams/e2e-link-edge.html): the RFC 8628 device flow, from the code on the PC to a household admin's approval, the device token, its rotation and revocation.
+- [Knowledge in both places](../diagrams/e2e-knowledge-sync.html): how the A-Boxes on the edge and in the cloud merge statement by statement, and where every write is checked.
+- [A chat proposal](../diagrams/e2e-chat-proposal.html): what happens to a change the chat asks for, from waiting for a click to ran, failed or dismissed.
 
 ## Edge
 

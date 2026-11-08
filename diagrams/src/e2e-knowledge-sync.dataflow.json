@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Knowledge in both places",
+    "output": "diagrams/e2e-knowledge-sync.html",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "stages": [
+    {
+      "label": "Written on the PC"
+    },
+    {
+      "label": "Edge A-Box"
+    },
+    {
+      "label": "Writers"
+    },
+    {
+      "label": "Cloud API"
+    },
+    {
+      "label": "Stored"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "faces",
+      "type": "database",
+      "label": "Faces and pets",
+      "sublabel": "confirmed in the catalog",
+      "stage": 0,
+      "row": 0
+    },
+    {
+      "id": "panel",
+      "type": "frontend",
+      "label": "Edge page, chat",
+      "sublabel": "events, places, tags",
+      "stage": 0,
+      "row": 2,
+      "tag": "confirmed"
+    },
+    {
+      "id": "abox",
+      "type": "database",
+      "label": "A-Box per vault",
+      "sublabel": "abox/<vault>.ttl",
+      "stage": 1,
+      "row": 1
+    },
+    {
+      "id": "base",
+      "type": "database",
+      "label": "Sync base",
+      "sublabel": "per connection",
+      "stage": 1,
+      "row": 3
+    },
+    {
+      "id": "merge",
+      "type": "backend",
+      "label": "sync.merge",
+      "sublabel": "statement by statement",
+      "stage": 2,
+      "row": 1,
+      "tag": "3-way"
+    },
+    {
+      "id": "edgeapi",
+      "type": "security",
+      "label": "edgeGraphs",
+      "sublabel": "/edge/v1/graphs",
+      "stage": 3,
+      "row": 0
+    },
+    {
+      "id": "graphs",
+      "type": "security",
+      "label": "graphs",
+      "sublabel": "saveGraph, admins",
+      "stage": 3,
+      "row": 2
+    },
+    {
+      "id": "store",
+      "type": "database",
+      "label": "Graph table",
+      "sublabel": "Turtle + version",
+      "stage": 4,
+      "row": 1,
+      "tag": "SHACL on save"
+    },
+    {
+      "id": "library",
+      "type": "frontend",
+      "label": "Library",
+      "sublabel": "the web page",
+      "stage": 2,
+      "row": 3
+    }
+  ],
+  "flows": [
+    {
+      "id": "export",
+      "from": "faces",
+      "to": "abox",
+      "label": "people, pets export"
+    },
+    {
+      "id": "edit",
+      "from": "panel",
+      "to": "abox",
+      "label": "proposals confirmed"
+    },
+    {
+      "id": "mine",
+      "from": "abox",
+      "to": "merge",
+      "label": "mine",
+      "variant": "emphasis"
+    },
+    {
+      "id": "agreed",
+      "from": "base",
+      "to": "merge",
+      "label": "base"
+    },
+    {
+      "id": "put",
+      "from": "merge",
+      "to": "edgeapi",
+      "label": "put(ttl, base version)",
+      "variant": "emphasis"
+    },
+    {
+      "id": "save",
+      "from": "edgeapi",
+      "to": "store",
+      "label": "valid: version + 1",
+      "variant": "security"
+    },
+    {
+      "id": "web",
+      "from": "graphs",
+      "to": "store",
+      "label": "valid: version + 1",
+      "variant": "security"
+    },
+    {
+      "id": "named",
+      "from": "library",
+      "to": "graphs",
+      "label": "loadGraph, saveGraph"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Both sides add",
+      "items": [
+        "merged = base − removed here − removed there + added here + added there",
+        "A photo added to an event here and a name given in the cloud both survive"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "A real disagreement",
+      "items": [
+        "Two values for a fact that has one: a date, an event type, a name, a summary in one language",
+        "That is a conflict: nothing is written, and the person picks mine or theirs"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Checked on every write",
+      "items": [
+        "The edge validates the merged graph before it writes anything",
+        "The cloud runs the same shapes and the sensitive-number guard for every writer",
+        "A save based on an old version gets 409 and the current graph, and the edge merges again"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "What crosses",
+      "items": [
+        "Statements about people, pets, events, places and things, and which items they are in",
+        "Never face vectors or crops; face boxes go separately, through /media/faces"
+      ]
+    }
+  ]
+}

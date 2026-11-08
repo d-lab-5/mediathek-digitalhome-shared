@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Linking an edge (RFC 8628)",
+    "output": "diagrams/e2e-link-edge.html",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "participants": [
+    {
+      "id": "edge",
+      "type": "backend",
+      "label": "Edge",
+      "sublabel": "cloud.py"
+    },
+    {
+      "id": "authz",
+      "type": "cloud",
+      "label": "Authorize",
+      "sublabel": "/device_authorization"
+    },
+    {
+      "id": "token",
+      "type": "cloud",
+      "label": "Token",
+      "sublabel": "/token, /rotate"
+    },
+    {
+      "id": "codes",
+      "type": "database",
+      "label": "Pairing tables",
+      "sublabel": "DynamoDB"
+    },
+    {
+      "id": "admin",
+      "type": "external",
+      "label": "Household admin",
+      "sublabel": "signed in"
+    },
+    {
+      "id": "page",
+      "type": "frontend",
+      "label": "Link page",
+      "sublabel": "/link"
+    },
+    {
+      "id": "approval",
+      "type": "security",
+      "label": "Approval",
+      "sublabel": "edgeDeviceApproval"
+    }
+  ],
+  "segments": [
+    {
+      "from": 150,
+      "to": 243,
+      "label": "Ask"
+    },
+    {
+      "from": 272,
+      "to": 393,
+      "label": "Wait"
+    },
+    {
+      "from": 422,
+      "to": 645,
+      "label": "Approve"
+    },
+    {
+      "from": 674,
+      "to": 797,
+      "label": "Token"
+    },
+    {
+      "from": 824,
+      "to": 975,
+      "label": "Keep and revoke"
+    }
+  ],
+  "messages": [
+    {
+      "id": "start",
+      "from": "edge",
+      "to": "authz",
+      "y": 165,
+      "label": "POST device_authorization"
+    },
+    {
+      "id": "mint",
+      "from": "authz",
+      "to": "codes",
+      "y": 199,
+      "label": "device_code, user_code, 10 min"
+    },
+    {
+      "id": "code",
+      "from": "authz",
+      "to": "edge",
+      "y": 233,
+      "label": "user_code, link, interval 5 s",
+      "variant": "return"
+    },
+    {
+      "id": "show",
+      "from": "edge",
+      "to": "admin",
+      "y": 287,
+      "label": "shows the code and the link",
+      "variant": "dashed"
+    },
+    {
+      "id": "poll",
+      "from": "edge",
+      "to": "token",
+      "y": 321,
+      "label": "poll /token",
+      "variant": "dashed",
+      "note": "slow_down adds 5 s"
+    },
+    {
+      "id": "pending",
+      "from": "token",
+      "to": "edge",
+      "y": 383,
+      "label": "authorization_pending",
+      "variant": "return"
+    },
+    {
+      "id": "open",
+      "from": "admin",
+      "to": "page",
+      "y": 437,
+      "label": "open /link?user_code=…"
+    },
+    {
+      "id": "describe",
+      "from": "page",
+      "to": "approval",
+      "y": 471,
+      "label": "describeDeviceCode"
+    },
+    {
+      "id": "info",
+      "from": "approval",
+      "to": "page",
+      "y": 505,
+      "label": "the edge's device_info",
+      "variant": "return"
+    },
+    {
+      "id": "approve",
+      "from": "admin",
+      "to": "page",
+      "y": 539,
+      "label": "Approve, for a household",
+      "variant": "security"
+    },
+    {
+      "id": "link",
+      "from": "page",
+      "to": "approval",
+      "y": 573,
+      "label": "approveDeviceCode",
+      "variant": "emphasis",
+      "note": "that household's admins only"
+    },
+    {
+      "id": "mark",
+      "from": "approval",
+      "to": "codes",
+      "y": 635,
+      "label": "approved, household"
+    },
+    {
+      "id": "poll2",
+      "from": "edge",
+      "to": "token",
+      "y": 689,
+      "label": "poll /token"
+    },
+    {
+      "id": "issue",
+      "from": "token",
+      "to": "codes",
+      "y": 723,
+      "label": "registry row; token hash only"
+    },
+    {
+      "id": "token",
+      "from": "token",
+      "to": "edge",
+      "y": 757,
+      "label": "200: device_token, 12 months",
+      "variant": "return",
+      "note": "0600 file, outside the repo"
+    },
+    {
+      "id": "rotate",
+      "from": "edge",
+      "to": "token",
+      "y": 839,
+      "label": "/token/rotate, 30 days before",
+      "variant": "emphasis",
+      "note": "old token valid 60 s more"
+    },
+    {
+      "id": "fresh",
+      "from": "token",
+      "to": "edge",
+      "y": 901,
+      "label": "a new device_token",
+      "variant": "return"
+    },
+    {
+      "id": "revoke",
+      "from": "admin",
+      "to": "approval",
+      "y": 935,
+      "label": "revokeEdge",
+      "variant": "security",
+      "note": "next call 410: link again"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "edge",
+      "from": 160,
+      "to": 906,
+      "type": "backend"
+    },
+    {
+      "participant": "authz",
+      "from": 160,
+      "to": 238,
+      "type": "cloud"
+    },
+    {
+      "participant": "token",
+      "from": 316,
+      "to": 906,
+      "type": "cloud"
+    },
+    {
+      "participant": "approval",
+      "from": 466,
+      "to": 940,
+      "type": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "The trust anchor",
+      "items": [
+        "A household admin's Cognito sign-in approves the edge",
+        "The edge belongs to that household and reaches only its vaults"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "What the cloud keeps",
+      "items": [
+        "The device_code lives 10 minutes and is deleted once used",
+        "Only the SHA-256 of a device token is stored",
+        "A refused or expired code tells nothing about whether it existed"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Too old to talk",
+      "items": [
+        "The cloud answers 426 to an edge below its minimum version",
+        "The edge says so instead of half working"
+      ]
+    }
+  ]
+}
