@@ -1,0 +1,228 @@
+@prefix mt:     <https://mediathek.digitalhome.cloud/ontology#> .
+@prefix mtsh:   <https://mediathek.digitalhome.cloud/shapes#> .
+@prefix sh:     <http://www.w3.org/ns/shacl#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos:   <http://www.w3.org/2004/02/skos/core#> .
+@prefix schema: <https://schema.org/> .
+@prefix foaf:   <http://xmlns.com/foaf/0.1/> .
+@prefix rel:    <http://purl.org/vocab/relationship/> .
+@prefix wgs84:  <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix oa:     <http://www.w3.org/ns/oa#> .
+
+# ============================================================
+# Mediathek — SHACL shapes, v0.1
+#
+# What an A-Box (and the concept schemes) must satisfy. Validate an A-Box
+# TOGETHER with tbox/mediathek-concepts.ttl, so a concept used as an event
+# type can be checked against its scheme.
+# ============================================================
+
+# ------------------------------------------------------ concepts: EN master --
+
+mtsh:ConceptShape a sh:NodeShape ;
+    sh:targetClass skos:Concept ;
+    sh:property [
+        sh:path skos:prefLabel ;
+        sh:uniqueLang true ;
+        sh:qualifiedValueShape [ sh:languageIn ( "en" ) ] ;
+        sh:qualifiedMinCount 1 ;
+        sh:message "A concept needs exactly one English prefLabel: English is the master language."@en ;
+    ] ;
+    sh:property [
+        sh:path skos:inScheme ;
+        sh:minCount 1 ;
+        sh:message "A concept belongs to a scheme (mt:EventTypes, mt:LifeAreas, …)."@en ;
+    ] .
+
+mtsh:InEventTypes a sh:NodeShape ;
+    sh:property [ sh:path skos:inScheme ; sh:hasValue mt:EventTypes ] .
+
+mtsh:InLifeAreas a sh:NodeShape ;
+    sh:property [ sh:path skos:inScheme ; sh:hasValue mt:LifeAreas ] .
+
+mtsh:InDocumentTypes a sh:NodeShape ;
+    sh:property [ sh:path skos:inScheme ; sh:hasValue mt:DocumentTypes ] .
+
+mtsh:InSummaryStates a sh:NodeShape ;
+    sh:property [ sh:path skos:inScheme ; sh:hasValue mt:SummaryStates ] .
+
+# ----------------------------------------------------------------- people --
+
+mtsh:PersonShape a sh:NodeShape ;
+    sh:targetClass mt:Person ;
+    sh:property [
+        sh:path schema:name ; sh:maxCount 1 ; sh:datatype xsd:string ;
+        sh:message "A person has at most one name (schema:name), a plain string. None means not yet recognised."@en ;
+    ] ;
+    sh:property [
+        sh:path mt:hidden ; sh:maxCount 1 ; sh:datatype xsd:boolean ;
+        sh:message "mt:hidden is one true or false."@en ;
+    ] ;
+    sh:property [
+        sh:path mt:mergedInto ; sh:maxCount 1 ; sh:class mt:Person ;
+        sh:message "mt:mergedInto points at one other person."@en ;
+    ] ;
+    sh:property [ sh:path rel:parentOf ;      sh:class mt:Person ; sh:message "parentOf links two persons."@en ] ;
+    sh:property [ sh:path rel:childOf ;       sh:class mt:Person ; sh:message "childOf links two persons."@en ] ;
+    sh:property [ sh:path rel:siblingOf ;     sh:class mt:Person ; sh:message "siblingOf links two persons."@en ] ;
+    sh:property [ sh:path rel:spouseOf ;      sh:class mt:Person ; sh:message "spouseOf links two persons."@en ] ;
+    sh:property [ sh:path rel:grandparentOf ; sh:class mt:Person ; sh:message "grandparentOf links two persons."@en ] ;
+    sh:property [ sh:path rel:grandchildOf ;  sh:class mt:Person ; sh:message "grandchildOf links two persons."@en ] ;
+    sh:property [ sh:path rel:friendOf ;      sh:class mt:Person ; sh:message "friendOf links two persons."@en ] ;
+    sh:property [ sh:path mt:classmateOf ;    sh:class mt:Person ; sh:message "classmateOf links two persons."@en ] ;
+    sh:property [
+        sh:path schema:birthDate ; sh:maxCount 1 ;
+        sh:or ( [ sh:datatype xsd:date ] [ sh:datatype xsd:gYear ] ) ;
+        sh:message "birthDate is a date or a year."@en ;
+    ] .
+
+mtsh:PetShape a sh:NodeShape ;
+    sh:targetClass mt:Pet ;
+    sh:property [
+        sh:path schema:name ; sh:maxCount 1 ; sh:datatype xsd:string ;
+        sh:message "A pet has at most one name (schema:name), a plain string. None means not yet named."@en ;
+    ] ;
+    sh:property [
+        sh:path mt:species ; sh:maxCount 1 ;
+        sh:in ( "dog" "cat" "horse" "rabbit" "guinea pig" "hamster" "bird" ) ;
+        sh:message "mt:species is one of dog, cat, horse, rabbit, guinea pig, hamster, bird."@en ;
+    ] ;
+    sh:property [
+        sh:path mt:hidden ; sh:maxCount 1 ; sh:datatype xsd:boolean ;
+        sh:message "mt:hidden is one true or false."@en ;
+    ] ;
+    sh:property [
+        sh:path mt:mergedInto ; sh:maxCount 1 ; sh:class mt:Pet ;
+        sh:message "mt:mergedInto points at one other pet."@en ;
+    ] .
+
+mtsh:FamilyShape a sh:NodeShape ;
+    sh:targetClass mt:Family ;
+    sh:property [
+        sh:path skos:prefLabel ; sh:uniqueLang true ; sh:datatype rdf:langString ;
+        sh:message "A name's translations: at most one per language, each with its language tag."@en ;
+    ] ;
+    sh:property [ sh:path schema:name ; sh:minCount 1 ; sh:message "A family needs a name."@en ] ;
+    sh:property [ sh:path mt:member ; sh:minCount 1 ; sh:class mt:Person ;
+                  sh:message "A family has at least one member, and members are persons."@en ] .
+
+# ----------------------------------------------------------------- events --
+
+mtsh:EventShape a sh:NodeShape ;
+    sh:targetClass mt:Event ;
+    sh:property [
+        sh:path skos:prefLabel ; sh:uniqueLang true ; sh:datatype rdf:langString ;
+        sh:message "A name's translations: at most one per language, each with its language tag."@en ;
+    ] ;
+    sh:property [
+        sh:path schema:name ; sh:minCount 1 ;
+        sh:message "An event needs a name, e.g. \"Klassentreffen 2019\"."@en ;
+    ] ;
+    sh:property [
+        sh:path mt:eventType ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:node mtsh:InEventTypes ;
+        sh:message "An event has exactly one type from mt:EventTypes (e.g. mt:ClassReunion)."@en ;
+    ] ;
+    sh:property [
+        sh:path schema:startDate ; sh:maxCount 1 ;
+        sh:or ( [ sh:datatype xsd:date ] [ sh:datatype xsd:dateTime ] [ sh:datatype xsd:gYear ] [ sh:datatype xsd:gYearMonth ] ) ;
+        sh:message "An event has at most one start: a date, a date-time, a year or a year-month. A generic event (\"Birthdays\") has none."@en ;
+    ] ;
+    sh:property [ sh:path schema:endDate ; sh:maxCount 1 ] ;
+    sh:property [ sh:path mt:place ; sh:class mt:Place ; sh:message "An event's place is an mt:Place."@en ] ;
+    sh:property [ sh:path schema:attendee ; sh:class mt:Person ; sh:message "Attendees are persons."@en ] ;
+    sh:property [ sh:path schema:superEvent ; sh:class mt:Event ; sh:message "An event is part of another event."@en ] ;
+    sh:property [ sh:path mt:lifeArea ; sh:node mtsh:InLifeAreas ; sh:message "Life areas come from mt:LifeAreas."@en ] .
+
+# ----------------------------------------------------------------- places --
+
+mtsh:PlaceShape a sh:NodeShape ;
+    sh:targetClass mt:Place ;
+    sh:property [
+        sh:path skos:prefLabel ; sh:uniqueLang true ; sh:datatype rdf:langString ;
+        sh:message "A name's translations: at most one per language, each with its language tag."@en ;
+    ] ;
+    sh:property [ sh:path schema:name ; sh:minCount 1 ; sh:message "A place needs a name."@en ] ;
+    sh:property [ sh:path mt:partOfPlace ; sh:class mt:Place ; sh:message "A place lies in another place."@en ] ;
+    sh:property [ sh:path wgs84:lat ;  sh:maxCount 1 ; sh:datatype xsd:decimal ; sh:minInclusive -90 ;  sh:maxInclusive 90 ] ;
+    sh:property [ sh:path wgs84:long ; sh:maxCount 1 ; sh:datatype xsd:decimal ; sh:minInclusive -180 ; sh:maxInclusive 180 ] .
+
+# ------------------------------------------------------------------ media --
+
+mtsh:ItemShape a sh:NodeShape ;
+    sh:targetClass mt:Photo , mt:Video , mt:Document ;
+    sh:property [
+        sh:path mt:sha256 ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:datatype xsd:string ; sh:pattern "^[0-9a-f]{64}$" ;
+        sh:message "An item is identified by one lowercase hex SHA-256."@en ;
+    ] ;
+    sh:property [
+        sh:path foaf:depicts ; sh:or ( [ sh:class mt:Person ] [ sh:class mt:Pet ] ) ;
+        sh:message "A photo shows persons and pets."@en ;
+    ] ;
+    sh:property [ sh:path mt:ofEvent ; sh:class mt:Event ; sh:message "An item is taken at an event."@en ] ;
+    sh:property [
+        sh:path mt:year ; sh:maxCount 1 ; sh:datatype xsd:gYear ;
+        sh:message "An item has at most one year set by hand, a year such as \"1987\"^^xsd:gYear."@en ;
+    ] ;
+    sh:property [ sh:path mt:place ; sh:class mt:Place ] ;
+    sh:property [ sh:path mt:lifeArea ; sh:node mtsh:InLifeAreas ; sh:message "Life areas come from mt:LifeAreas."@en ] .
+
+# -------------------------------------------- summaries (ADR-0016, 0017) --
+# What an item says or shows, for photos and films as for documents: a
+# summary per language, how far it was checked, its own date, and what it
+# mentions. Only a document has a document type.
+
+mtsh:SummaryShape a sh:NodeShape ;
+    sh:targetClass mt:Photo , mt:Video , mt:Document ;
+    sh:property [
+        sh:path schema:abstract ; sh:datatype rdf:langString ; sh:languageIn ( "en" "de" "fr" ) ; sh:uniqueLang true ;
+        sh:message "An item has at most one summary per language, in en, de or fr, each with its language tag."@en ;
+    ] ;
+    sh:property [
+        sh:path schema:dateCreated ; sh:maxCount 1 ;
+        sh:or ( [ sh:datatype xsd:date ] [ sh:datatype xsd:gYear ] [ sh:datatype xsd:gYearMonth ] ) ;
+        sh:message "An item has at most one date of its own: a date, a year or a year-month."@en ;
+    ] ;
+    sh:property [
+        sh:path schema:mentions ;
+        sh:or ( [ sh:class mt:Person ] [ sh:class mt:Pet ] [ sh:class mt:Place ] [ sh:class mt:Event ] ) ;
+        sh:message "An item mentions persons, pets, places and events."@en ;
+    ] ;
+    sh:property [
+        sh:path mt:summaryState ; sh:maxCount 1 ; sh:node mtsh:InSummaryStates ;
+        sh:message "A summary's state is mt:SummaryDraft or mt:SummaryChecked."@en ;
+    ] ;
+    # a summary needs its state: either no summary, or a state
+    sh:or (
+        [ sh:property [ sh:path schema:abstract ; sh:maxCount 0 ] ]
+        [ sh:property [ sh:path mt:summaryState ; sh:minCount 1 ] ]
+    ) ;
+    sh:message "An item with a summary says how far it was reviewed (mt:summaryState)."@en .
+
+mtsh:DocumentShape a sh:NodeShape ;
+    sh:targetClass mt:Document ;
+    sh:property [
+        sh:path mt:documentType ; sh:maxCount 1 ; sh:node mtsh:InDocumentTypes ;
+        sh:message "A document has at most one type, from mt:DocumentTypes (e.g. mt:Invoice)."@en ;
+    ] .
+
+mtsh:PictureShape a sh:NodeShape ;
+    sh:targetClass mt:Photo , mt:Video ;
+    sh:property [
+        sh:path mt:documentType ; sh:maxCount 0 ;
+        sh:message "Only a document has a document type."@en ;
+    ] .
+
+# ------------------------------------------------------------------ faces --
+
+mtsh:FaceShape a sh:NodeShape ;
+    sh:targetClass mt:FaceAnnotation ;
+    sh:property [ sh:path oa:hasBody ; sh:minCount 1 ; sh:maxCount 1 ; sh:class mt:Person ;
+                  sh:message "A face shows exactly one person."@en ] ;
+    sh:property [ sh:path ( oa:hasTarget oa:hasSource ) ; sh:minCount 1 ; sh:class mt:Photo ;
+                  sh:message "A face is a region of a photo."@en ] ;
+    sh:property [ sh:path ( oa:hasTarget oa:hasSelector rdf:value ) ; sh:minCount 1 ;
+                  sh:pattern "^xywh=percent:[0-9.]+,[0-9.]+,[0-9.]+,[0-9.]+$" ;
+                  sh:message "A face region is a media fragment, xywh=percent:x,y,w,h."@en ] .

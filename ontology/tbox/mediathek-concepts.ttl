@@ -1,0 +1,233 @@
+@prefix mt:      <https://mediathek.digitalhome.cloud/ontology#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+
+# ============================================================
+# Mediathek — concept schemes (SKOS), v0.1
+#
+# New event types and life areas are added HERE, as data: no code or schema
+# change. Each concept needs an English prefLabel (the master); German and
+# French prefLabels are expected, altLabels help search and CLIP prompts.
+# ============================================================
+
+# ------------------------------------------------------------ event types --
+
+mt:EventTypes a skos:ConceptScheme ;
+    skos:prefLabel "Event types"@en , "Arten von Ereignissen"@de , "Types d'événements"@fr ;
+    dcterms:description "What kind of occasion an event was."@en ;
+    skos:hasTopConcept mt:Gathering , mt:Celebration , mt:SeasonalHoliday , mt:SchoolEvent , mt:Travel , mt:SportsEvent , mt:Performance ,
+        mt:LifeEvent , mt:WorkEvent , mt:Everyday .
+
+mt:Gathering a skos:Concept ; skos:inScheme mt:EventTypes ; skos:topConceptOf mt:EventTypes ;
+    skos:prefLabel "Gathering"@en , "Treffen"@de , "Rencontre"@fr .
+
+mt:ClassReunion a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:Gathering ;
+    skos:prefLabel "Class reunion"@en , "Klassentreffen"@de , "Retrouvailles de classe"@fr ;
+    skos:altLabel "School reunion"@en , "Jahrgangstreffen"@de , "Réunion d'anciens élèves"@fr ;
+    skos:definition "Former classmates meeting again, years after school."@en .
+
+mt:FamilyReunion a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:Gathering ;
+    skos:prefLabel "Family reunion"@en , "Familientreffen"@de , "Réunion de famille"@fr .
+
+mt:Party a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:Gathering ;
+    skos:prefLabel "Party"@en , "Feier"@de , "Fête"@fr ;
+    skos:altLabel "Party"@de , "Soirée"@fr .
+
+mt:Celebration a skos:Concept ; skos:inScheme mt:EventTypes ; skos:topConceptOf mt:EventTypes ;
+    skos:prefLabel "Celebration"@en , "Fest"@de , "Célébration"@fr .
+
+mt:Birthday a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:Celebration ;
+    skos:prefLabel "Birthday"@en , "Geburtstag"@de , "Anniversaire"@fr .
+
+mt:Wedding a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:Celebration ;
+    skos:prefLabel "Wedding"@en , "Hochzeit"@de , "Mariage"@fr .
+
+mt:WeddingAnniversary a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:Celebration ;
+    skos:prefLabel "Wedding anniversary"@en , "Hochzeitstag"@de , "Anniversaire de mariage"@fr .
+
+mt:Christening a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:Celebration ;
+    skos:prefLabel "Christening"@en , "Taufe"@de , "Baptême"@fr ;
+    skos:altLabel "Baptism"@en .
+
+mt:SeasonalHoliday a skos:Concept ; skos:inScheme mt:EventTypes ; skos:topConceptOf mt:EventTypes ;
+    skos:prefLabel "Seasonal holiday"@en , "Feiertag"@de , "Fête calendaire"@fr .
+
+mt:Christmas a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:SeasonalHoliday ;
+    skos:prefLabel "Christmas"@en , "Weihnachten"@de , "Noël"@fr .
+
+mt:Easter a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:SeasonalHoliday ;
+    skos:prefLabel "Easter"@en , "Ostern"@de , "Pâques"@fr .
+
+mt:NewYearsEve a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:SeasonalHoliday ;
+    skos:prefLabel "New Year's Eve"@en , "Silvester"@de , "Réveillon du Nouvel An"@fr .
+
+mt:SchoolEvent a skos:Concept ; skos:inScheme mt:EventTypes ; skos:topConceptOf mt:EventTypes ;
+    skos:prefLabel "School event"@en , "Schulereignis"@de , "Événement scolaire"@fr .
+
+mt:FirstSchoolDay a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:SchoolEvent ;
+    skos:prefLabel "First day of school"@en , "Einschulung"@de , "Premier jour d'école"@fr .
+
+mt:Graduation a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:SchoolEvent ;
+    skos:prefLabel "Graduation"@en , "Schulabschluss"@de , "Remise des diplômes"@fr ;
+    skos:altLabel "Abitur"@de , "Baccalauréat"@fr .
+
+mt:SchoolTrip a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:SchoolEvent ;
+    skos:prefLabel "School trip"@en , "Klassenfahrt"@de , "Voyage scolaire"@fr .
+
+mt:Travel a skos:Concept ; skos:inScheme mt:EventTypes ; skos:topConceptOf mt:EventTypes ;
+    skos:prefLabel "Trip"@en , "Reise"@de , "Voyage"@fr .
+
+mt:Vacation a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:Travel ;
+    skos:prefLabel "Holiday"@en , "Urlaub"@de , "Vacances"@fr ;
+    skos:altLabel "Vacation"@en , "Ferien"@de .
+
+mt:SportsEvent a skos:Concept ; skos:inScheme mt:EventTypes ; skos:topConceptOf mt:EventTypes ;
+    skos:prefLabel "Sports event"@en , "Sportveranstaltung"@de , "Événement sportif"@fr ;
+    skos:altLabel "Match"@en , "Wettkampf"@de , "Compétition"@fr .
+
+mt:Performance a skos:Concept ; skos:inScheme mt:EventTypes ; skos:topConceptOf mt:EventTypes ;
+    skos:prefLabel "Performance"@en , "Aufführung"@de , "Spectacle"@fr ;
+    skos:altLabel "Concert"@en , "Konzert"@de , "Concert"@fr .
+
+mt:Anniversary a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:Celebration ;
+    skos:prefLabel "Anniversary"@en , "Jubiläum"@de , "Jubilé"@fr ;
+    skos:altLabel "Jubilee"@en , "Jahrestag"@de , "Anniversaire"@fr .
+
+mt:FirstCommunion a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:Celebration ;
+    skos:prefLabel "First communion"@en , "Erstkommunion"@de , "Première communion"@fr .
+
+mt:Confirmation a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:Celebration ;
+    skos:prefLabel "Confirmation"@en , "Konfirmation"@de , "Confirmation"@fr ;
+    skos:altLabel "Firmung"@de , "Profession de foi"@fr .
+
+mt:Housewarming a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:Party ;
+    skos:prefLabel "Housewarming"@en , "Einweihungsfeier"@de , "Pendaison de crémaillère"@fr .
+
+mt:Carnival a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:SeasonalHoliday ;
+    skos:prefLabel "Carnival"@en , "Karneval"@de , "Carnaval"@fr ;
+    skos:altLabel "Fasching"@de , "Fastnacht"@de , "Mardi gras"@fr .
+
+mt:Halloween a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:SeasonalHoliday ;
+    skos:prefLabel "Halloween"@en , "Halloween"@de , "Halloween"@fr .
+
+mt:DayTrip a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:Travel ;
+    skos:prefLabel "Day trip"@en , "Ausflug"@de , "Excursion"@fr ;
+    skos:altLabel "Outing"@en , "Sortie"@fr , "Hike"@en , "Wanderung"@de , "Randonnée"@fr .
+
+mt:WeekendTrip a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:Travel ;
+    skos:prefLabel "Weekend trip"@en , "Wochenendausflug"@de , "Week-end"@fr .
+
+mt:LifeEvent a skos:Concept ; skos:inScheme mt:EventTypes ; skos:topConceptOf mt:EventTypes ;
+    skos:prefLabel "Life event"@en , "Lebensereignis"@de , "Étape de vie"@fr .
+
+mt:Birth a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:LifeEvent ;
+    skos:prefLabel "Birth"@en , "Geburt"@de , "Naissance"@fr .
+
+mt:MovingHouse a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:LifeEvent ;
+    skos:prefLabel "Moving house"@en , "Umzug"@de , "Déménagement"@fr .
+
+mt:Retirement a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:LifeEvent ;
+    skos:prefLabel "Retirement"@en , "Ruhestand"@de , "Départ à la retraite"@fr .
+
+mt:Funeral a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:LifeEvent ;
+    skos:prefLabel "Funeral"@en , "Beerdigung"@de , "Obsèques"@fr ;
+    skos:altLabel "Trauerfeier"@de , "Funérailles"@fr .
+
+mt:WorkEvent a skos:Concept ; skos:inScheme mt:EventTypes ; skos:topConceptOf mt:EventTypes ;
+    skos:prefLabel "Work event"@en , "Berufliches Ereignis"@de , "Événement professionnel"@fr .
+
+mt:CompanyParty a skos:Concept ; skos:inScheme mt:EventTypes ; skos:broader mt:WorkEvent ;
+    skos:prefLabel "Company party"@en , "Betriebsfeier"@de , "Fête d'entreprise"@fr .
+
+mt:Everyday a skos:Concept ; skos:inScheme mt:EventTypes ; skos:topConceptOf mt:EventTypes ;
+    skos:prefLabel "Everyday"@en , "Alltag"@de , "Quotidien"@fr ;
+    skos:altLabel "Daily life"@en , "Vie quotidienne"@fr .
+
+# ------------------------------------------------------------- life areas --
+
+mt:LifeAreas a skos:ConceptScheme ;
+    skos:prefLabel "Life areas"@en , "Lebensbereiche"@de , "Domaines de vie"@fr ;
+    dcterms:description "Which part of life a photo, album or event belongs to."@en ;
+    skos:hasTopConcept mt:AreaFamily , mt:AreaFriends , mt:AreaSchool , mt:AreaWork , mt:AreaSport , mt:AreaTravel , mt:AreaHome , mt:AreaHobbies , mt:AreaNature .
+
+mt:AreaFamily a skos:Concept ; skos:inScheme mt:LifeAreas ; skos:topConceptOf mt:LifeAreas ;
+    skos:prefLabel "Family"@en , "Familie"@de , "Famille"@fr .
+mt:AreaFriends a skos:Concept ; skos:inScheme mt:LifeAreas ; skos:topConceptOf mt:LifeAreas ;
+    skos:prefLabel "Friends"@en , "Freunde"@de , "Amis"@fr .
+mt:AreaSchool a skos:Concept ; skos:inScheme mt:LifeAreas ; skos:topConceptOf mt:LifeAreas ;
+    skos:prefLabel "School"@en , "Schule"@de , "École"@fr .
+mt:AreaWork a skos:Concept ; skos:inScheme mt:LifeAreas ; skos:topConceptOf mt:LifeAreas ;
+    skos:prefLabel "Work"@en , "Arbeit"@de , "Travail"@fr .
+mt:AreaSport a skos:Concept ; skos:inScheme mt:LifeAreas ; skos:topConceptOf mt:LifeAreas ;
+    skos:prefLabel "Sport"@en , "Sport"@de , "Sport"@fr .
+mt:AreaTravel a skos:Concept ; skos:inScheme mt:LifeAreas ; skos:topConceptOf mt:LifeAreas ;
+    skos:prefLabel "Travel"@en , "Reisen"@de , "Voyages"@fr .
+mt:AreaHome a skos:Concept ; skos:inScheme mt:LifeAreas ; skos:topConceptOf mt:LifeAreas ;
+    skos:prefLabel "Home"@en , "Zuhause"@de , "Maison"@fr .
+mt:AreaHobbies a skos:Concept ; skos:inScheme mt:LifeAreas ; skos:topConceptOf mt:LifeAreas ;
+    skos:prefLabel "Hobbies"@en , "Hobbys"@de , "Loisirs"@fr .
+mt:AreaNature a skos:Concept ; skos:inScheme mt:LifeAreas ; skos:topConceptOf mt:LifeAreas ;
+    skos:prefLabel "Nature"@en , "Natur"@de , "Nature"@fr .
+
+# --------------------------------------------------------- document types --
+
+mt:DocumentTypes a skos:ConceptScheme ;
+    skos:prefLabel "Document types"@en , "Arten von Dokumenten"@de , "Types de documents"@fr ;
+    dcterms:description "What kind of paper an office document or other file is (ADR-0016)."@en ;
+    skos:hasTopConcept mt:Invoice , mt:Receipt , mt:Contract , mt:Letter , mt:Certificate , mt:SchoolWork ,
+        mt:ReportCard , mt:Warranty , mt:Manual , mt:InsuranceDocument , mt:TaxDocument , mt:BankStatement ,
+        mt:Payslip , mt:MedicalDocument , mt:Form , mt:Report , mt:Presentation , mt:Spreadsheet , mt:Notes ,
+        mt:OtherDocument .
+
+mt:Invoice a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Invoice"@en , "Rechnung"@de , "Facture"@fr ; skos:altLabel "Bill"@en .
+mt:Receipt a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Receipt"@en , "Quittung"@de , "Reçu"@fr ; skos:altLabel "Kassenbon"@de , "Ticket de caisse"@fr .
+mt:Contract a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Contract"@en , "Vertrag"@de , "Contrat"@fr ; skos:altLabel "Agreement"@en .
+mt:Letter a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Letter"@en , "Brief"@de , "Lettre"@fr ; skos:altLabel "Schreiben"@de , "Courrier"@fr .
+mt:Certificate a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Certificate"@en , "Urkunde"@de , "Certificat"@fr ; skos:altLabel "Diploma"@en , "Bescheinigung"@de , "Diplôme"@fr , "Attestation"@fr .
+mt:SchoolWork a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "School work"@en , "Schularbeit"@de , "Travail scolaire"@fr ; skos:altLabel "Homework"@en , "Hausaufgabe"@de , "Devoir"@fr .
+mt:ReportCard a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Report card"@en , "Zeugnis"@de , "Bulletin scolaire"@fr .
+mt:Warranty a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Warranty"@en , "Garantie"@de , "Garantie"@fr ; skos:altLabel "Guarantee"@en .
+mt:Manual a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Manual"@en , "Anleitung"@de , "Mode d'emploi"@fr ; skos:altLabel "Bedienungsanleitung"@de , "Notice"@fr .
+mt:InsuranceDocument a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Insurance"@en , "Versicherung"@de , "Assurance"@fr ; skos:altLabel "Policy"@en , "Police"@de , "Sinistre"@fr .
+mt:TaxDocument a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Tax"@en , "Steuer"@de , "Impôts"@fr ; skos:altLabel "Steuerbescheid"@de , "Avis d'imposition"@fr .
+mt:BankStatement a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Bank statement"@en , "Kontoauszug"@de , "Relevé bancaire"@fr .
+mt:Payslip a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Payslip"@en , "Gehaltsabrechnung"@de , "Fiche de paie"@fr ; skos:altLabel "Lohnabrechnung"@de , "Bulletin de salaire"@fr .
+mt:MedicalDocument a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Medical"@en , "Medizinisch"@de , "Médical"@fr ; skos:altLabel "Arztbrief"@de , "Ordonnance"@fr , "Prescription"@en .
+mt:Form a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Form"@en , "Formular"@de , "Formulaire"@fr ; skos:altLabel "Antrag"@de , "Demande"@fr , "Application"@en .
+mt:Report a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Report"@en , "Bericht"@de , "Rapport"@fr .
+mt:Presentation a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Presentation"@en , "Präsentation"@de , "Présentation"@fr .
+mt:Spreadsheet a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Spreadsheet"@en , "Tabelle"@de , "Tableur"@fr ; skos:altLabel "List"@en , "Liste"@de , "Liste"@fr .
+mt:Notes a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Notes"@en , "Notizen"@de , "Notes"@fr .
+mt:OtherDocument a skos:Concept ; skos:inScheme mt:DocumentTypes ; skos:topConceptOf mt:DocumentTypes ;
+    skos:prefLabel "Other document"@en , "Anderes Dokument"@de , "Autre document"@fr .
+
+# --------------------------------------------------------- summary states --
+
+mt:SummaryStates a skos:ConceptScheme ;
+    skos:prefLabel "Summary states"@en , "Stand der Zusammenfassung"@de , "États du résumé"@fr ;
+    dcterms:description "How far a document's summary has been reviewed (ADR-0016)."@en ;
+    skos:hasTopConcept mt:SummaryDraft , mt:SummaryChecked .
+
+mt:SummaryDraft a skos:Concept ; skos:inScheme mt:SummaryStates ; skos:topConceptOf mt:SummaryStates ;
+    skos:prefLabel "AI draft"@en , "KI-Entwurf"@de , "Brouillon IA"@fr .
+mt:SummaryChecked a skos:Concept ; skos:inScheme mt:SummaryStates ; skos:topConceptOf mt:SummaryStates ;
+    skos:prefLabel "Checked"@en , "Geprüft"@de , "Vérifié"@fr .

@@ -1,0 +1,136 @@
+{
+  "schema_version": 3,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "A document summary's state (ADR-0016)",
+    "output": "diagrams/adr-0016-summary-state.html",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "mainPath": [
+    "none",
+    "proposed",
+    "draft",
+    "checked"
+  ],
+  "states": [
+    {
+      "id": "none",
+      "type": "start",
+      "label": "No summary",
+      "sublabel": "file kept as itself",
+      "tag": "filter: none",
+      "step": "01"
+    },
+    {
+      "id": "proposed",
+      "type": "waiting",
+      "label": "Proposed",
+      "sublabel": "in the chat panel",
+      "tag": "not stored",
+      "step": "02"
+    },
+    {
+      "id": "draft",
+      "type": "decision",
+      "label": "AI draft",
+      "sublabel": "mt:SummaryDraft",
+      "tag": "filter: draft",
+      "step": "03"
+    },
+    {
+      "id": "checked",
+      "type": "success",
+      "label": "Checked",
+      "sublabel": "mt:SummaryChecked",
+      "tag": "filter: checked",
+      "step": "04"
+    },
+    {
+      "id": "refused",
+      "type": "failure",
+      "label": "Refused",
+      "sublabel": "sensitive number or bad language",
+      "tag": "nothing written"
+    },
+    {
+      "id": "unreadable",
+      "type": "neutral",
+      "label": "No text",
+      "sublabel": "scan, or format not read",
+      "tag": "OCR later"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "none-proposed",
+      "from": "none",
+      "to": "proposed",
+      "label": "Summarise"
+    },
+    {
+      "id": "proposed-draft",
+      "from": "proposed",
+      "to": "draft",
+      "label": "Confirm",
+      "variant": "emphasis"
+    },
+    {
+      "id": "draft-checked",
+      "from": "draft",
+      "to": "checked",
+      "label": "Mark checked",
+      "variant": "security"
+    },
+    {
+      "id": "proposed-none",
+      "from": "proposed",
+      "to": "none",
+      "label": "Dismiss"
+    },
+    {
+      "id": "proposed-refused",
+      "from": "proposed",
+      "to": "refused",
+      "label": "guard",
+      "variant": "security"
+    },
+    {
+      "id": "none-unreadable",
+      "from": "none",
+      "to": "unreadable",
+      "label": "read_document",
+      "variant": "dashed"
+    },
+    {
+      "id": "checked-draft",
+      "from": "checked",
+      "to": "draft",
+      "label": "agent rewrites"
+    },
+    {
+      "id": "draft-edited",
+      "from": "draft",
+      "to": "checked",
+      "label": "Edit, save"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Draft",
+      "items": [
+        "Every place a draft shows marks it as one",
+        "The Library filters Office and Other by state"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Checked",
+      "items": [
+        "Only a person sets it, in the Library or the edge file card",
+        "The shapes refuse a summary without a state"
+      ]
+    }
+  ]
+}

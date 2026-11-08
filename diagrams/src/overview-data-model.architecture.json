@@ -1,0 +1,358 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "The Mediathek data model",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1240,
+      660
+    ],
+    "views": [
+      {
+        "id": "catalog",
+        "label": "Households & vaults",
+        "focus": [
+          "household",
+          "vault",
+          "asset",
+          "album",
+          "edgereg"
+        ],
+        "note": "A household holds vaults; each vault's Cognito group may read its assets and albums. Admins of the household curate."
+      },
+      {
+        "id": "abox",
+        "label": "Family knowledge",
+        "focus": [
+          "asset",
+          "person",
+          "pet",
+          "event",
+          "place"
+        ],
+        "note": "Each vault has an A-Box: people, pets, places and events, linked to photos by their SHA-256. Names are labels on ids."
+      },
+      {
+        "id": "edge",
+        "label": "On the edge",
+        "focus": [
+          "files",
+          "faces",
+          "asset",
+          "person"
+        ],
+        "note": "The edge's catalog knows every file by MD5 and SHA-256; faces and finds with their fingerprints never leave the PC."
+      }
+    ],
+    "output": "diagrams/overview-data-model.html"
+  },
+  "components": [
+    {
+      "id": "files",
+      "type": "database",
+      "label": "Files",
+      "sublabel": "source · key · md5 · sha256",
+      "pos": [
+        40,
+        300
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "faces",
+      "type": "database",
+      "label": "Faces & finds",
+      "sublabel": "box · fingerprint",
+      "pos": [
+        40,
+        520
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "household",
+      "type": "security",
+      "label": "Household",
+      "sublabel": "h-… · admins group",
+      "pos": [
+        540,
+        60
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "edgereg",
+      "type": "backend",
+      "label": "Edge",
+      "sublabel": "token · version",
+      "pos": [
+        300,
+        60
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "vault",
+      "type": "security",
+      "label": "Vault",
+      "sublabel": "v-… · readers group",
+      "pos": [
+        780,
+        60
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "album",
+      "type": "database",
+      "label": "Album",
+      "sublabel": "path · entries",
+      "pos": [
+        780,
+        300
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "asset",
+      "type": "database",
+      "label": "Asset",
+      "sublabel": "sha256 · faces · bin",
+      "pos": [
+        300,
+        300
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "person",
+      "type": "frontend",
+      "label": "Person",
+      "sublabel": "id · name label",
+      "pos": [
+        300,
+        520
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "pet",
+      "type": "frontend",
+      "label": "Pet",
+      "sublabel": "id · species",
+      "pos": [
+        540,
+        520
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "event",
+      "type": "frontend",
+      "label": "Event",
+      "sublabel": "type · dates",
+      "pos": [
+        780,
+        520
+      ],
+      "size": [
+        150,
+        64
+      ]
+    },
+    {
+      "id": "place",
+      "type": "frontend",
+      "label": "Place",
+      "sublabel": "part of · geo",
+      "pos": [
+        1020,
+        520
+      ],
+      "size": [
+        150,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Edge · SQLite on this PC",
+      "wraps": [
+        "files",
+        "faces"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "Mediathek catalog · DynamoDB",
+      "wraps": [
+        "household",
+        "edgereg",
+        "vault",
+        "album",
+        "asset"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "A-Box per vault · RDF",
+      "wraps": [
+        "person",
+        "pet",
+        "event",
+        "place"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "linked",
+      "from": "edgereg",
+      "to": "household",
+      "label": "belongs to"
+    },
+    {
+      "id": "hasvault",
+      "from": "household",
+      "to": "vault",
+      "label": "has"
+    },
+    {
+      "id": "albums",
+      "from": "vault",
+      "to": "album",
+      "label": "albums",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        855,
+        212
+      ]
+    },
+    {
+      "id": "entries",
+      "from": "album",
+      "to": "asset",
+      "label": "entries",
+      "fromSide": "left",
+      "toSide": "right"
+    },
+    {
+      "id": "published",
+      "from": "files",
+      "to": "asset",
+      "label": "sha256 = id",
+      "variant": "emphasis"
+    },
+    {
+      "id": "foundon",
+      "from": "faces",
+      "to": "files",
+      "label": "found on",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "shows",
+      "from": "asset",
+      "to": "person",
+      "label": "shows",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        361,
+        488
+      ]
+    },
+    {
+      "id": "showspet",
+      "from": "asset",
+      "to": "pet",
+      "label": "shows",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "ofevent",
+      "from": "asset",
+      "to": "event",
+      "label": "at event",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "variant": "dashed"
+    },
+    {
+      "id": "at",
+      "from": "event",
+      "to": "place",
+      "label": "at"
+    },
+    {
+      "id": "named",
+      "from": "faces",
+      "to": "person",
+      "label": "named as",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Identity",
+      "items": [
+        "A photo or film is its SHA-256: the same id everywhere",
+        "People, pets, places and events are minted ids",
+        "Names are labels; merging keeps the old id pointing on"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Who may read",
+      "items": [
+        "A vault's group reads its assets, albums and A-Box",
+        "The household's group (admins) curates its vaults",
+        "Operators run the platform, they read no content"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "What stays on the PC",
+      "items": [
+        "Face and pet fingerprints and crops",
+        "Where the files came from (sources and keys)",
+        "The cloud gets boxes and ids, never fingerprints"
+      ]
+    }
+  ]
+}

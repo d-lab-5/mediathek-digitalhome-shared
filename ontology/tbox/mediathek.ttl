@@ -1,0 +1,213 @@
+@prefix mt:      <https://mediathek.digitalhome.cloud/ontology#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix skos:    <http://www.w3.org/2004/02/skos/core#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix schema:  <https://schema.org/> .
+@prefix foaf:    <http://xmlns.com/foaf/0.1/> .
+@prefix rel:     <http://purl.org/vocab/relationship/> .
+@prefix oa:      <http://www.w3.org/ns/oa#> .
+@prefix wgs84:   <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+
+# ============================================================
+# Mediathek — T-Box, v0.1
+#
+# A thin layer over standard vocabularies. It defines only what they do not
+# have, and says how the standards are used here:
+#
+#   schema.org   Event, Place, ImageObject / VideoObject, name, dates, attendee
+#   FOAF         Person, Group, depicts (a photo shows a person)
+#   RELATIONSHIP family relations (parentOf, siblingOf, spouseOf, …)
+#   SKOS         the concept schemes: event types, life areas (concepts file)
+#   Web Annotation  a face region of a photo, and who it shows
+#   WGS84 geo    coordinates of a place
+#
+# Labels: English is the master and is required (shapes/mediathek-shapes.ttl);
+# German and French are given for everything a person sees.
+#
+# Instances (A-Boxes) are per family or occasion, never in this file. They
+# hold personal data: see ../README.md.
+# ============================================================
+
+<https://mediathek.digitalhome.cloud/ontology>
+    a owl:Ontology ;
+    rdfs:label "Mediathek ontology"@en , "Mediathek-Ontologie"@de , "Ontologie de la Médiathèque"@fr ;
+    dcterms:creator "D-LAB-5 / DigitalHome.Cloud" ;
+    dcterms:description "Photos, films and the people, events, places and life areas they belong to. A thin layer over schema.org, FOAF, RELATIONSHIP, SKOS and Web Annotation."@en ;
+    dcterms:license <https://opensource.org/licenses/MIT> ;
+    owl:versionInfo "0.1.0" .
+
+# ------------------------------------------------------------------ media --
+
+mt:Item a owl:Class ;
+    rdfs:subClassOf schema:MediaObject ;
+    rdfs:label "Item"@en , "Medium"@de , "Média"@fr ;
+    rdfs:comment "One piece of media in the Mediathek, identified by the SHA-256 of its original bytes."@en .
+
+mt:Photo a owl:Class ;
+    rdfs:subClassOf mt:Item , schema:ImageObject , foaf:Image ;
+    rdfs:label "Photo"@en , "Foto"@de , "Photo"@fr .
+
+mt:Video a owl:Class ;
+    rdfs:subClassOf mt:Item , schema:VideoObject ;
+    rdfs:label "Video"@en , "Video"@de , "Vidéo"@fr .
+
+mt:Document a owl:Class ;
+    rdfs:subClassOf mt:Item , schema:DigitalDocument ;
+    rdfs:label "Document"@en , "Dokument"@de , "Document"@fr ;
+    rdfs:comment "An office document or other file, kept as its original (ADR-0014). What it says is described by a summary that is reviewed (ADR-0016)."@en .
+
+schema:abstract rdfs:label "summary"@en , "Zusammenfassung"@de , "résumé"@fr ;
+    rdfs:comment "What an item (a photo, a film or a document) shows or says, at most one per language (en, de, fr), written by the agent and reviewed by a person; mt:summaryState says how far."@en .
+schema:dateCreated rdfs:label "document date"@en , "Datum des Dokuments"@de , "date du document"@fr ;
+    rdfs:comment "The date the item itself carries (an invoice's date, a date written on a photo), not the file's."@en .
+schema:mentions rdfs:label "mentions"@en , "nennt"@de , "mentionne"@fr ;
+    rdfs:comment "A person, pet, place or event an item names or is about: a document's parties and subject, a film's occasion."@en .
+
+mt:documentType a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain mt:Document ; rdfs:range skos:Concept ;
+    rdfs:label "document type"@en , "Art des Dokuments"@de , "type de document"@fr ;
+    rdfs:comment "A concept from mt:DocumentTypes, e.g. mt:Invoice."@en .
+
+mt:summaryState a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain mt:Item ; rdfs:range skos:Concept ;
+    rdfs:label "summary state"@en , "Stand der Zusammenfassung"@de , "état du résumé"@fr ;
+    rdfs:comment "mt:SummaryDraft (written by the agent, not looked at yet) or mt:SummaryChecked (a person read and checked it)."@en .
+
+mt:Album a owl:Class ;
+    rdfs:subClassOf schema:Collection ;
+    rdfs:label "Album"@en , "Album"@de , "Album"@fr .
+
+mt:sha256 a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain mt:Item ; rdfs:range xsd:string ;
+    rdfs:label "SHA-256"@en , "SHA-256"@de , "SHA-256"@fr ;
+    rdfs:comment "Lowercase hex SHA-256 of the original: the item's identity in every environment."@en .
+
+mt:inAlbum a owl:ObjectProperty ;
+    rdfs:domain mt:Item ; rdfs:range mt:Album ;
+    rdfs:label "in album"@en , "im Album"@de , "dans l'album"@fr .
+
+mt:ofEvent a owl:ObjectProperty ;
+    rdfs:subPropertyOf schema:about ;
+    rdfs:domain mt:Item ; rdfs:range mt:Event ;
+    rdfs:label "taken at"@en , "aufgenommen bei"@de , "pris lors de"@fr ;
+    rdfs:comment "The event a photo or film was taken at."@en .
+
+mt:year a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain mt:Item ; rdfs:range xsd:gYear ;
+    rdfs:label "year"@en , "Jahr"@de , "année"@fr ;
+    rdfs:comment "The year a photo or film was taken, set by hand when the file's own date is wrong or missing (a scan, a copy). It replaces the file's year; the month and day are not guessed."@en .
+
+# ----------------------------------------------------------------- people --
+
+# Names the family types (events, places, families) are schema:name, as typed:
+# the master and the fallback. Optional translations are skos:prefLabel with a
+# language tag ("Family party"@en), at most one per language.
+
+mt:Person a owl:Class ;
+    rdfs:subClassOf foaf:Person , schema:Person ;
+    rdfs:label "Person"@en , "Person"@de , "Personne"@fr ;
+    rdfs:comment "Someone, identified by a minted id; the name is only a label. A person without a name is someone seen on photos and kept together (their faces look alike) but not yet recognised."@en .
+
+mt:Pet a owl:Class ;
+    rdfs:label "Pet"@en , "Haustier"@de , "Animal de compagnie"@fr ;
+    rdfs:comment "An animal of the family, identified by a minted id like a person; the name is only a label. Found on photos by the edge (a detector, then crops that look alike), named by the family."@en .
+
+mt:species a owl:DatatypeProperty , owl:FunctionalProperty ;
+    rdfs:domain mt:Pet ; rdfs:range xsd:string ;
+    rdfs:label "species"@en , "Tierart"@de , "espèce"@fr ;
+    rdfs:comment "What kind of animal: dog, cat, horse, rabbit, guinea pig, hamster or bird."@en .
+
+mt:hidden a owl:DatatypeProperty ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( mt:Person mt:Pet ) ] ; rdfs:range xsd:boolean ;
+    rdfs:label "hidden"@en , "ausgeblendet"@de , "masqué"@fr ;
+    rdfs:comment "Left out of lists and filters unless asked for; still counted and viewable on each photo. People kept without a name start hidden."@en .
+
+mt:mergedInto a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:subPropertyOf owl:sameAs ;
+    rdfs:domain [ a owl:Class ; owl:unionOf ( mt:Person mt:Pet ) ] ;
+    rdfs:range [ a owl:Class ; owl:unionOf ( mt:Person mt:Pet ) ] ;
+    rdfs:label "same person as"@en , "dieselbe Person wie"@de , "même personne que"@fr ;
+    rdfs:comment "This record turned out to be another person (an unknown given a name that exists). Kept so that face boxes and links elsewhere pointing at it still resolve."@en .
+
+mt:Family a owl:Class ;
+    rdfs:subClassOf foaf:Group ;
+    rdfs:label "Family"@en , "Familie"@de , "Famille"@fr .
+
+mt:member a owl:ObjectProperty ;
+    rdfs:subPropertyOf foaf:member ;
+    rdfs:domain mt:Family ; rdfs:range mt:Person ;
+    rdfs:label "member"@en , "Mitglied"@de , "membre"@fr .
+
+# Family relations are the RELATIONSHIP vocabulary's own terms. Labels for
+# the ones the Mediathek offers are given here, so the pages can show them
+# in three languages.
+
+rel:parentOf      rdfs:label "parent of"@en , "Elternteil von"@de , "parent de"@fr .
+rel:childOf       rdfs:label "child of"@en , "Kind von"@de , "enfant de"@fr .
+rel:siblingOf     rdfs:label "sibling of"@en , "Geschwister von"@de , "frère ou sœur de"@fr .
+rel:spouseOf      rdfs:label "spouse of"@en , "Ehepartner von"@de , "époux ou épouse de"@fr .
+rel:grandparentOf rdfs:label "grandparent of"@en , "Großelternteil von"@de , "grand-parent de"@fr .
+rel:grandchildOf  rdfs:label "grandchild of"@en , "Enkelkind von"@de , "petit-enfant de"@fr .
+rel:friendOf      rdfs:label "friend of"@en , "befreundet mit"@de , "ami de"@fr .
+
+mt:classmateOf a owl:ObjectProperty , owl:SymmetricProperty ;
+    rdfs:domain mt:Person ; rdfs:range mt:Person ;
+    rdfs:label "classmate of"@en , "Klassenkamerad von"@de , "camarade de classe de"@fr ;
+    rdfs:comment "Went to the same class. The RELATIONSHIP vocabulary has no such term."@en .
+
+foaf:depicts rdfs:label "shows"@en , "zeigt"@de , "montre"@fr .
+
+# ----------------------------------------------------------------- events --
+
+mt:Event a owl:Class ;
+    rdfs:subClassOf schema:Event ;
+    rdfs:label "Event"@en , "Ereignis"@de , "Événement"@fr .
+
+mt:eventType a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain mt:Event ; rdfs:range skos:Concept ;
+    rdfs:label "event type"@en , "Art des Ereignisses"@de , "type d'événement"@fr ;
+    rdfs:comment "A concept from mt:EventTypes, e.g. mt:ClassReunion."@en .
+
+schema:attendee   rdfs:label "attendee"@en , "Teilnehmer"@de , "participant"@fr .
+schema:superEvent rdfs:label "part of"@en , "Teil von"@de , "fait partie de"@fr ;
+    rdfs:comment "An occurrence (\"Birthday 2017\") is part of a generic event (\"Birthdays\"), which has no date. Photos of the occurrence count for the generic event too."@en .
+
+# ----------------------------------------------------------------- places --
+
+mt:Place a owl:Class ;
+    rdfs:subClassOf schema:Place ;
+    rdfs:label "Place"@en , "Ort"@de , "Lieu"@fr .
+
+mt:partOfPlace a owl:ObjectProperty , owl:TransitiveProperty ;
+    rdfs:subPropertyOf schema:containedInPlace ;
+    rdfs:domain mt:Place ; rdfs:range mt:Place ;
+    rdfs:label "part of"@en , "liegt in"@de , "fait partie de"@fr ;
+    rdfs:comment "Country ← region ← town ← venue."@en .
+
+mt:place a owl:ObjectProperty ;
+    rdfs:subPropertyOf schema:location ;
+    rdfs:range mt:Place ;
+    rdfs:label "place"@en , "Ort"@de , "lieu"@fr ;
+    rdfs:comment "Where an item was taken or an event took place."@en .
+
+mt:geonames a owl:ObjectProperty ;
+    rdfs:subPropertyOf owl:sameAs ;
+    rdfs:domain mt:Place ;
+    rdfs:label "GeoNames entry"@en , "GeoNames-Eintrag"@de , "entrée GeoNames"@fr .
+
+# ------------------------------------------------------------- life areas --
+
+mt:lifeArea a owl:ObjectProperty ;
+    rdfs:range skos:Concept ;
+    rdfs:label "life area"@en , "Lebensbereich"@de , "domaine de vie"@fr ;
+    rdfs:comment "A concept from mt:LifeAreas (School, Work, Family, …) for an item, album or event."@en .
+
+# ------------------------------------------------------------------ faces --
+
+mt:FaceAnnotation a owl:Class ;
+    rdfs:subClassOf oa:Annotation ;
+    rdfs:label "Face"@en , "Gesicht"@de , "Visage"@fr ;
+    rdfs:comment "A region of a photo (oa:hasTarget with a media-fragment selector, xywh=percent:…) and the person it shows (oa:hasBody). Only names confirmed by a person; face vectors never appear in any A-Box."@en .
