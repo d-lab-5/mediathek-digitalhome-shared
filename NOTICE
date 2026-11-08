@@ -1,0 +1,13 @@
+Mediathek shared documentation
+Copyright (c) 2026 D-LAB-5
+
+Sources
+- adr/, ROADMAP.md, diagrams/: moved from the Mediathek cloud repository
+  (d-lab-5/mediathek-digitalhome-cloud, commit dbbf091, 2026-11-08), where
+  their history up to then is kept.
+- ontology/: a copy of the cloud's packages/ontology (MIT); the source stays
+  there. scripts/sync-ontology.sh keeps it in step.
+- diagrams/*.html: rendered by Archify (https://github.com/tt-a1i/archify),
+  whose viewer each page embeds under its own licence (MIT); see the notices
+  in each page.
+- marked (MIT) and n3 (MIT) build the site; they are not shipped in it.
