@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Summarising a document (ADR-0016)",
+    "output": "diagrams/adr-0016-summarise.html",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "participants": [
+    {
+      "id": "person",
+      "type": "external",
+      "label": "Person",
+      "sublabel": "household admin"
+    },
+    {
+      "id": "page",
+      "type": "frontend",
+      "label": "Edge page",
+      "sublabel": "preview + chat"
+    },
+    {
+      "id": "agent",
+      "type": "cloud",
+      "label": "Chat agent",
+      "sublabel": "claude -p, own account"
+    },
+    {
+      "id": "edge",
+      "type": "backend",
+      "label": "Edge API",
+      "sublabel": "MCP tools, doctext"
+    },
+    {
+      "id": "abox",
+      "type": "database",
+      "label": "Vault A-Box",
+      "sublabel": "item's own vault .ttl"
+    },
+    {
+      "id": "graph",
+      "type": "security",
+      "label": "Graph Lambda",
+      "sublabel": "SHACL + guard"
+    },
+    {
+      "id": "library",
+      "type": "frontend",
+      "label": "Library",
+      "sublabel": "viewer card"
+    }
+  ],
+  "segments": [
+    {
+      "from": 150,
+      "to": 320,
+      "label": "Read on request"
+    },
+    {
+      "from": 325,
+      "to": 555,
+      "label": "Draft on confirm"
+    },
+    {
+      "from": 560,
+      "to": 735,
+      "label": "Sync and check"
+    }
+  ],
+  "messages": [
+    {
+      "id": "summarise",
+      "from": "person",
+      "to": "page",
+      "y": 165,
+      "label": "select documents, Summarise"
+    },
+    {
+      "id": "ask",
+      "from": "page",
+      "to": "agent",
+      "y": 195,
+      "label": "canned ask + selection",
+      "variant": "emphasis"
+    },
+    {
+      "id": "read",
+      "from": "agent",
+      "to": "edge",
+      "y": 225,
+      "label": "read_document(item)"
+    },
+    {
+      "id": "text",
+      "from": "edge",
+      "to": "agent",
+      "y": 255,
+      "label": "text, max 20,000 chars",
+      "variant": "return",
+      "note": "extracted on the PC: pypdf, OOXML, ODF, text; a scan reports no text layer"
+    },
+    {
+      "id": "describe",
+      "from": "agent",
+      "to": "edge",
+      "y": 340,
+      "label": "describe_document(en, de, fr, type, date, mentions)",
+      "variant": "emphasis",
+      "note": "a summary with an IBAN, card, long number or password is refused here"
+    },
+    {
+      "id": "proposal",
+      "from": "edge",
+      "to": "page",
+      "y": 425,
+      "label": "proposal waits",
+      "variant": "return"
+    },
+    {
+      "id": "confirm",
+      "from": "person",
+      "to": "page",
+      "y": 455,
+      "label": "Confirm",
+      "variant": "security"
+    },
+    {
+      "id": "store",
+      "from": "edge",
+      "to": "abox",
+      "y": 485,
+      "label": "set_document: mt:SummaryDraft",
+      "note": "guard and SHACL again; mentions introduced from other vaults"
+    },
+    {
+      "id": "sync",
+      "from": "abox",
+      "to": "graph",
+      "y": 570,
+      "label": "sync: 3-way merge, per language",
+      "variant": "dashed",
+      "note": "the Lambda checks the shapes and the guard for every writer"
+    },
+    {
+      "id": "show",
+      "from": "graph",
+      "to": "library",
+      "y": 655,
+      "label": "AI draft badge, page language",
+      "variant": "return"
+    },
+    {
+      "id": "check",
+      "from": "person",
+      "to": "library",
+      "y": 685,
+      "label": "edit, Mark checked",
+      "variant": "security"
+    },
+    {
+      "id": "checked",
+      "from": "library",
+      "to": "graph",
+      "y": 715,
+      "label": "mt:SummaryChecked",
+      "variant": "emphasis"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "page",
+      "from": 160,
+      "to": 460,
+      "type": "frontend"
+    },
+    {
+      "participant": "agent",
+      "from": 190,
+      "to": 345,
+      "type": "cloud"
+    },
+    {
+      "participant": "edge",
+      "from": 220,
+      "to": 490,
+      "type": "backend"
+    },
+    {
+      "participant": "abox",
+      "from": 480,
+      "to": 575,
+      "type": "database"
+    },
+    {
+      "participant": "graph",
+      "from": 565,
+      "to": 720,
+      "type": "security"
+    },
+    {
+      "participant": "library",
+      "from": 650,
+      "to": 720,
+      "type": "frontend"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "What leaves the PC",
+      "items": [
+        "Only the text of documents the person asked to summarise",
+        "It goes to Claude under the person's own account",
+        "Nothing is read on its own"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Never in a summary",
+      "items": [
+        "IBANs (mod-97), card numbers (Luhn), runs of nine digits or more",
+        "Passwords, PINs, keys and tokens",
+        "Checked on the edge, in the Library and in the Lambda; the refusal names the reason, never the value"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "A person decides",
+      "items": [
+        "The agent can only propose a draft",
+        "Marking checked is never proposable",
+        "Edit saves the summary as checked"
+      ]
+    }
+  ]
+}

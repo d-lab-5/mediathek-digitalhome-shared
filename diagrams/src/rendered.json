@@ -1,0 +1,22 @@
+{
+  "adr-0016-summarise": {
+    "source": "f83adc59dc43448b0748cff6a872057d7e7fc7634b10f3b8c0e705d4da0b605a",
+    "page": "c7a39fd491d2abdc8acb4594668b56512ab9742b69e020ea9fd15b0f2b85b68d"
+  },
+  "adr-0016-summary-state": {
+    "source": "8b57e0aaae5e569ef24ae627a1c1e8687f8a2f1356f00eb10dd4e17dd16cce6d",
+    "page": "7eeae0169d82b5f4e1f8bb1c79ca63361ff652b4ca612ac16cc40d1aa20f422c"
+  },
+  "adr-0017-find-similar": {
+    "source": "e38f13bf16a893bedddb63a696ba56d71de69f9fc24bceb695d9c7a387c0a454",
+    "page": "f845f6ae68b2b3635199b6b2e0c5d09fe97d0fa9ec6099ea0e9278c58d8cba45"
+  },
+  "overview-data-model": {
+    "source": "667c851d1277d9a7b181c9193a0e4d10afeca24e8946bd342ed3f21513106d78",
+    "page": "a5a556a54c65d448b889affd040116d8875af5ec846523a39ad14dd80256d965"
+  },
+  "overview-how-it-works": {
+    "source": "e7763208d5e9b846e64e657db337f7dc9300a834e647b0c7ee3ceaa9cffe5290",
+    "page": "0250f3cb8d633da0a61be016708c1dd9cbbe95e525e0968e4851aea42b0dfb70"
+  }
+}

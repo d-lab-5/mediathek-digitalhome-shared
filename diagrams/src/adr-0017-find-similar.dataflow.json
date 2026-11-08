@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "diagram_type": "dataflow",
+  "meta": {
+    "title": "Finding similar items (ADR-0017)",
+    "output": "diagrams/adr-0017-find-similar.html",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "stages": [
+    {
+      "label": "On the PC"
+    },
+    {
+      "label": "Signals"
+    },
+    {
+      "label": "Ranking"
+    },
+    {
+      "label": "Shown to"
+    },
+    {
+      "label": "Cloud"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "pictures",
+      "type": "database",
+      "label": "Photos & films",
+      "sublabel": "previews, frames",
+      "stage": 0,
+      "row": 0
+    },
+    {
+      "id": "documents",
+      "type": "database",
+      "label": "Documents",
+      "sublabel": "extracted text",
+      "stage": 0,
+      "row": 1
+    },
+    {
+      "id": "aboxes",
+      "type": "database",
+      "label": "A-Boxes",
+      "sublabel": "per vault",
+      "stage": 0,
+      "row": 2
+    },
+    {
+      "id": "catalog",
+      "type": "database",
+      "label": "Catalog",
+      "sublabel": "albums, folders, dates",
+      "stage": 0,
+      "row": 3
+    },
+    {
+      "id": "looks",
+      "type": "backend",
+      "label": "Looks",
+      "sublabel": "CLIP ViT-B/32",
+      "stage": 1,
+      "row": 0,
+      "tag": "ONNX, CPU"
+    },
+    {
+      "id": "text",
+      "type": "backend",
+      "label": "Text",
+      "sublabel": "TF-IDF",
+      "stage": 1,
+      "row": 1,
+      "tag": "no model"
+    },
+    {
+      "id": "facts",
+      "type": "backend",
+      "label": "Known facts",
+      "sublabel": "same event, album, day",
+      "stage": 1,
+      "row": 3
+    },
+    {
+      "id": "rank",
+      "type": "backend",
+      "label": "similar()",
+      "sublabel": "weighted mix",
+      "stage": 2,
+      "row": 1,
+      "tag": "with reasons"
+    },
+    {
+      "id": "preview",
+      "type": "frontend",
+      "label": "Preview",
+      "sublabel": "Similar to N selected",
+      "stage": 3,
+      "row": 0
+    },
+    {
+      "id": "chat",
+      "type": "external",
+      "label": "Chat",
+      "sublabel": "find_similar",
+      "stage": 3,
+      "row": 2,
+      "tag": "proposes tags"
+    },
+    {
+      "id": "cloud",
+      "type": "cloud",
+      "label": "Mediathek",
+      "sublabel": "the vault's A-Box",
+      "stage": 4,
+      "row": 1
+    }
+  ],
+  "flows": [
+    {
+      "id": "pixels",
+      "from": "pictures",
+      "to": "looks",
+      "label": "pixels, 6 frames",
+      "variant": "emphasis"
+    },
+    {
+      "id": "words",
+      "from": "documents",
+      "to": "text",
+      "label": "words",
+      "variant": "emphasis"
+    },
+    {
+      "id": "summaries",
+      "from": "aboxes",
+      "to": "text",
+      "label": "summaries"
+    },
+    {
+      "id": "known",
+      "from": "aboxes",
+      "to": "facts",
+      "label": "event, people"
+    },
+    {
+      "id": "places",
+      "from": "catalog",
+      "to": "facts",
+      "label": "album, date"
+    },
+    {
+      "id": "cosine",
+      "from": "looks",
+      "to": "rank",
+      "label": "cosine to centre",
+      "variant": "emphasis"
+    },
+    {
+      "id": "textcos",
+      "from": "text",
+      "to": "rank",
+      "label": "word cosine",
+      "variant": "emphasis"
+    },
+    {
+      "id": "matches",
+      "from": "facts",
+      "to": "rank",
+      "label": "matches"
+    },
+    {
+      "id": "ranked",
+      "from": "rank",
+      "to": "preview",
+      "label": "best first",
+      "variant": "emphasis"
+    },
+    {
+      "id": "read",
+      "from": "rank",
+      "to": "chat",
+      "label": "find_similar"
+    },
+    {
+      "id": "show",
+      "from": "chat",
+      "to": "preview",
+      "label": "show_in_preview"
+    },
+    {
+      "id": "tags",
+      "from": "preview",
+      "to": "cloud",
+      "label": "confirmed tags",
+      "variant": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Three signals, one score",
+      "items": [
+        "Looks: how alike two pictures are, to the centre of the selection; a film's looks are the mean of six frames",
+        "Text: TF-IDF over a document's words and any item's summary; it matches words, not meanings",
+        "Known facts: the same event, person, pet, place or thing, the same album or folder, a date within three days",
+        "Each signal adds a weighted share; the reasons come back as text, such as 'looks alike 0.86 · same album · 2 days apart'"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "What leaves the PC",
+      "items": [
+        "Looks vectors, extracted text and the ranking stay in the edge's catalog, like face embeddings",
+        "The chat reads the ranking only when the person asks it to group",
+        "The cloud learns only the tags a person confirms, through the usual A-Box sync"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Before the looks are made",
+      "items": [
+        "Looks need the 350 MB model once and a pass over the photos, as a job",
+        "Until a photo has its vector, it is compared by text and known facts only, and the answer says how many lack looks"
+      ]
+    }
+  ]
+}

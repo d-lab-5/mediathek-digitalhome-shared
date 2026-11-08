@@ -1,0 +1,428 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "How the Mediathek edge works",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "viewBox": [
+      1240,
+      660
+    ],
+    "views": [
+      {
+        "id": "collect",
+        "label": "Collect & settle",
+        "focus": [
+          "sources",
+          "inventory",
+          "publish"
+        ],
+        "note": "Sources are listed read-only. Hashes settle identical files, look-alikes and film fingerprints settle copies."
+      },
+      {
+        "id": "publish-path",
+        "label": "Publish photos & films",
+        "focus": [
+          "publish",
+          "edgeapi",
+          "store",
+          "catalog",
+          "cdn",
+          "site"
+        ],
+        "note": "Photos are rendered, films become 720p/1080p MP4. Each goes up once, write-once by SHA-256, into its vault."
+      },
+      {
+        "id": "recognition",
+        "label": "Faces & pets, on this PC",
+        "focus": [
+          "publish",
+          "ai",
+          "people",
+          "knowledge"
+        ],
+        "note": "Faces and animals are found on photos and film frames, grouped, and named by you. Crops never leave this PC."
+      },
+      {
+        "id": "sync",
+        "label": "Sync with the Mediathek",
+        "focus": [
+          "knowledge",
+          "edgeapi",
+          "catalog",
+          "site"
+        ],
+        "note": "The A-Box syncs both ways: people, pets, places, events go up; names, angles and marked faces come back."
+      },
+      {
+        "id": "chat",
+        "label": "Chat with Claude",
+        "focus": [
+          "chat",
+          "inventory",
+          "publish",
+          "knowledge"
+        ],
+        "note": "Claude Code with only the edge's tools: it reads the catalogue, and every change waits for your Confirm."
+      }
+    ],
+    "output": "diagrams/overview-how-it-works.html"
+  },
+  "components": [
+    {
+      "id": "sources",
+      "type": "external",
+      "label": "Sources",
+      "sublabel": "S3 · folders · Google",
+      "pos": [
+        20,
+        60
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "inventory",
+      "type": "backend",
+      "label": "Inventory",
+      "sublabel": "list · hash · copies",
+      "pos": [
+        210,
+        60
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "publish",
+      "type": "backend",
+      "label": "Publish",
+      "sublabel": "photos · ffmpeg films",
+      "pos": [
+        410,
+        60
+      ],
+      "size": [
+        140,
+        64
+      ],
+      "tag": "once per piece"
+    },
+    {
+      "id": "people",
+      "type": "database",
+      "label": "People & pets",
+      "sublabel": "named groups",
+      "pos": [
+        210,
+        300
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "ai",
+      "type": "backend",
+      "label": "Faces & pets",
+      "sublabel": "photos · film frames",
+      "pos": [
+        410,
+        300
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "chat",
+      "type": "frontend",
+      "label": "Chat",
+      "sublabel": "Claude Code · MCP",
+      "pos": [
+        210,
+        520
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "knowledge",
+      "type": "database",
+      "label": "Family knowledge",
+      "sublabel": "A-Box · synced",
+      "pos": [
+        410,
+        520
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "edgeapi",
+      "type": "security",
+      "label": "Edge API",
+      "sublabel": "device token",
+      "pos": [
+        650,
+        60
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "store",
+      "type": "database",
+      "label": "Shared media store",
+      "sublabel": "S3 · write-once",
+      "pos": [
+        860,
+        60
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "catalog",
+      "type": "backend",
+      "label": "Catalog & A-Box",
+      "sublabel": "per vault · shared",
+      "pos": [
+        650,
+        520
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "cdn",
+      "type": "cloud",
+      "label": "CloudFront",
+      "sublabel": "signed per vault",
+      "pos": [
+        860,
+        300
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "site",
+      "type": "frontend",
+      "label": "Mediathek",
+      "sublabel": "library · player",
+      "pos": [
+        1070,
+        300
+      ],
+      "size": [
+        140,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "This PC · mediathek-edge",
+      "wraps": [
+        "inventory",
+        "publish",
+        "people",
+        "ai",
+        "chat",
+        "knowledge"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "Local only · never uploaded",
+      "wraps": [
+        "people",
+        "ai"
+      ]
+    },
+    {
+      "kind": "region",
+      "label": "AWS eu-central-1",
+      "wraps": [
+        "edgeapi",
+        "store",
+        "catalog",
+        "cdn",
+        "site"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "list",
+      "from": "sources",
+      "to": "inventory",
+      "label": "read-only",
+      "variant": "dashed"
+    },
+    {
+      "id": "distinct",
+      "from": "inventory",
+      "to": "publish",
+      "label": "distinct",
+      "variant": "emphasis"
+    },
+    {
+      "id": "upload",
+      "from": "publish",
+      "to": "edgeapi",
+      "label": "upload",
+      "variant": "emphasis"
+    },
+    {
+      "id": "put",
+      "from": "edgeapi",
+      "to": "store",
+      "label": "SHA-256 PUT",
+      "variant": "security"
+    },
+    {
+      "id": "derived",
+      "from": "store",
+      "to": "cdn",
+      "label": "derived/<vault>",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        930,
+        210
+      ]
+    },
+    {
+      "id": "signed",
+      "from": "cdn",
+      "to": "site",
+      "label": "signed"
+    },
+    {
+      "id": "frames",
+      "from": "publish",
+      "to": "ai",
+      "label": "copies · frames",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        480,
+        210
+      ]
+    },
+    {
+      "id": "name",
+      "from": "ai",
+      "to": "people",
+      "label": "you name"
+    },
+    {
+      "id": "who",
+      "from": "people",
+      "to": "knowledge",
+      "label": "who is where"
+    },
+    {
+      "id": "sync",
+      "from": "knowledge",
+      "to": "catalog",
+      "label": "A-Box",
+      "fromSide": "right",
+      "toSide": "left",
+      "labelAt": [
+        600,
+        578
+      ]
+    },
+    {
+      "id": "back",
+      "from": "catalog",
+      "to": "knowledge",
+      "label": "names back",
+      "fromSide": "left",
+      "toSide": "right",
+      "labelAt": [
+        600,
+        528
+      ]
+    },
+    {
+      "id": "register",
+      "from": "edgeapi",
+      "to": "catalog",
+      "label": "register",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        720,
+        290
+      ]
+    },
+    {
+      "id": "groups",
+      "from": "catalog",
+      "to": "site",
+      "label": "Cognito groups"
+    },
+    {
+      "id": "propose",
+      "from": "chat",
+      "to": "knowledge",
+      "label": "you confirm",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "bottom"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Pipeline",
+      "items": [
+        "Sources → inventory → duplicates and copies settled",
+        "Publish: photos rendered, films as 720p/1080p MP4",
+        "Faces and pets found, named, synced as boxes and ids"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Households and vaults",
+      "items": [
+        "Each source goes to a vault; its group may read",
+        "Same household on stage and prod: one upload",
+        "The A-Box syncs both ways; conflicts are yours to choose"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Privacy",
+      "items": [
+        "Fingerprints, crops and the catalogue stay here",
+        "Originals: only tagged roles may read them",
+        "Edges pair by a code an admin approves"
+      ]
+    }
+  ]
+}

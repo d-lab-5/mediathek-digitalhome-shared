@@ -1,0 +1,754 @@
+{
+ "eventTypes": [
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Celebration",
+   "id": "Celebration",
+   "labels": {
+    "de": "Fest",
+    "en": "Celebration",
+    "fr": "Célébration"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Anniversary",
+   "id": "Anniversary",
+   "labels": {
+    "de": "Jubiläum",
+    "en": "Anniversary",
+    "fr": "Jubilé"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#Celebration"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Birthday",
+   "id": "Birthday",
+   "labels": {
+    "de": "Geburtstag",
+    "en": "Birthday",
+    "fr": "Anniversaire"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#Celebration"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Christening",
+   "id": "Christening",
+   "labels": {
+    "de": "Taufe",
+    "en": "Christening",
+    "fr": "Baptême"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#Celebration"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Confirmation",
+   "id": "Confirmation",
+   "labels": {
+    "de": "Konfirmation",
+    "en": "Confirmation",
+    "fr": "Confirmation"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#Celebration"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#FirstCommunion",
+   "id": "FirstCommunion",
+   "labels": {
+    "de": "Erstkommunion",
+    "en": "First communion",
+    "fr": "Première communion"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#Celebration"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Wedding",
+   "id": "Wedding",
+   "labels": {
+    "de": "Hochzeit",
+    "en": "Wedding",
+    "fr": "Mariage"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#Celebration"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#WeddingAnniversary",
+   "id": "WeddingAnniversary",
+   "labels": {
+    "de": "Hochzeitstag",
+    "en": "Wedding anniversary",
+    "fr": "Anniversaire de mariage"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#Celebration"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Everyday",
+   "id": "Everyday",
+   "labels": {
+    "de": "Alltag",
+    "en": "Everyday",
+    "fr": "Quotidien"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Gathering",
+   "id": "Gathering",
+   "labels": {
+    "de": "Treffen",
+    "en": "Gathering",
+    "fr": "Rencontre"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#ClassReunion",
+   "id": "ClassReunion",
+   "labels": {
+    "de": "Klassentreffen",
+    "en": "Class reunion",
+    "fr": "Retrouvailles de classe"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#Gathering"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#FamilyReunion",
+   "id": "FamilyReunion",
+   "labels": {
+    "de": "Familientreffen",
+    "en": "Family reunion",
+    "fr": "Réunion de famille"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#Gathering"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Party",
+   "id": "Party",
+   "labels": {
+    "de": "Feier",
+    "en": "Party",
+    "fr": "Fête"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#Gathering"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#LifeEvent",
+   "id": "LifeEvent",
+   "labels": {
+    "de": "Lebensereignis",
+    "en": "Life event",
+    "fr": "Étape de vie"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Birth",
+   "id": "Birth",
+   "labels": {
+    "de": "Geburt",
+    "en": "Birth",
+    "fr": "Naissance"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#LifeEvent"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Funeral",
+   "id": "Funeral",
+   "labels": {
+    "de": "Beerdigung",
+    "en": "Funeral",
+    "fr": "Obsèques"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#LifeEvent"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#MovingHouse",
+   "id": "MovingHouse",
+   "labels": {
+    "de": "Umzug",
+    "en": "Moving house",
+    "fr": "Déménagement"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#LifeEvent"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Retirement",
+   "id": "Retirement",
+   "labels": {
+    "de": "Ruhestand",
+    "en": "Retirement",
+    "fr": "Départ à la retraite"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#LifeEvent"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Performance",
+   "id": "Performance",
+   "labels": {
+    "de": "Aufführung",
+    "en": "Performance",
+    "fr": "Spectacle"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#SchoolEvent",
+   "id": "SchoolEvent",
+   "labels": {
+    "de": "Schulereignis",
+    "en": "School event",
+    "fr": "Événement scolaire"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#FirstSchoolDay",
+   "id": "FirstSchoolDay",
+   "labels": {
+    "de": "Einschulung",
+    "en": "First day of school",
+    "fr": "Premier jour d'école"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#SchoolEvent"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Graduation",
+   "id": "Graduation",
+   "labels": {
+    "de": "Schulabschluss",
+    "en": "Graduation",
+    "fr": "Remise des diplômes"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#SchoolEvent"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#SchoolTrip",
+   "id": "SchoolTrip",
+   "labels": {
+    "de": "Klassenfahrt",
+    "en": "School trip",
+    "fr": "Voyage scolaire"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#SchoolEvent"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#SeasonalHoliday",
+   "id": "SeasonalHoliday",
+   "labels": {
+    "de": "Feiertag",
+    "en": "Seasonal holiday",
+    "fr": "Fête calendaire"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Carnival",
+   "id": "Carnival",
+   "labels": {
+    "de": "Karneval",
+    "en": "Carnival",
+    "fr": "Carnaval"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#SeasonalHoliday"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Christmas",
+   "id": "Christmas",
+   "labels": {
+    "de": "Weihnachten",
+    "en": "Christmas",
+    "fr": "Noël"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#SeasonalHoliday"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Easter",
+   "id": "Easter",
+   "labels": {
+    "de": "Ostern",
+    "en": "Easter",
+    "fr": "Pâques"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#SeasonalHoliday"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Halloween",
+   "id": "Halloween",
+   "labels": {
+    "de": "Halloween",
+    "en": "Halloween",
+    "fr": "Halloween"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#SeasonalHoliday"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#NewYearsEve",
+   "id": "NewYearsEve",
+   "labels": {
+    "de": "Silvester",
+    "en": "New Year's Eve",
+    "fr": "Réveillon du Nouvel An"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#SeasonalHoliday"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#SportsEvent",
+   "id": "SportsEvent",
+   "labels": {
+    "de": "Sportveranstaltung",
+    "en": "Sports event",
+    "fr": "Événement sportif"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Travel",
+   "id": "Travel",
+   "labels": {
+    "de": "Reise",
+    "en": "Trip",
+    "fr": "Voyage"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#DayTrip",
+   "id": "DayTrip",
+   "labels": {
+    "de": "Ausflug",
+    "en": "Day trip",
+    "fr": "Excursion"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#Travel"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Vacation",
+   "id": "Vacation",
+   "labels": {
+    "de": "Urlaub",
+    "en": "Holiday",
+    "fr": "Vacances"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#Travel"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#WeekendTrip",
+   "id": "WeekendTrip",
+   "labels": {
+    "de": "Wochenendausflug",
+    "en": "Weekend trip",
+    "fr": "Week-end"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#Travel"
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#WorkEvent",
+   "id": "WorkEvent",
+   "labels": {
+    "de": "Berufliches Ereignis",
+    "en": "Work event",
+    "fr": "Événement professionnel"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#CompanyParty",
+   "id": "CompanyParty",
+   "labels": {
+    "de": "Betriebsfeier",
+    "en": "Company party",
+    "fr": "Fête d'entreprise"
+   },
+   "broader": "https://mediathek.digitalhome.cloud/ontology#WorkEvent"
+  }
+ ],
+ "lifeAreas": [
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#AreaFamily",
+   "id": "AreaFamily",
+   "labels": {
+    "de": "Familie",
+    "en": "Family",
+    "fr": "Famille"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#AreaFriends",
+   "id": "AreaFriends",
+   "labels": {
+    "de": "Freunde",
+    "en": "Friends",
+    "fr": "Amis"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#AreaHobbies",
+   "id": "AreaHobbies",
+   "labels": {
+    "de": "Hobbys",
+    "en": "Hobbies",
+    "fr": "Loisirs"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#AreaHome",
+   "id": "AreaHome",
+   "labels": {
+    "de": "Zuhause",
+    "en": "Home",
+    "fr": "Maison"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#AreaNature",
+   "id": "AreaNature",
+   "labels": {
+    "de": "Natur",
+    "en": "Nature",
+    "fr": "Nature"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#AreaSchool",
+   "id": "AreaSchool",
+   "labels": {
+    "de": "Schule",
+    "en": "School",
+    "fr": "École"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#AreaSport",
+   "id": "AreaSport",
+   "labels": {
+    "de": "Sport",
+    "en": "Sport",
+    "fr": "Sport"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#AreaTravel",
+   "id": "AreaTravel",
+   "labels": {
+    "de": "Reisen",
+    "en": "Travel",
+    "fr": "Voyages"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#AreaWork",
+   "id": "AreaWork",
+   "labels": {
+    "de": "Arbeit",
+    "en": "Work",
+    "fr": "Travail"
+   },
+   "broader": null
+  }
+ ],
+ "documentTypes": [
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#BankStatement",
+   "id": "BankStatement",
+   "labels": {
+    "de": "Kontoauszug",
+    "en": "Bank statement",
+    "fr": "Relevé bancaire"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Certificate",
+   "id": "Certificate",
+   "labels": {
+    "de": "Urkunde",
+    "en": "Certificate",
+    "fr": "Certificat"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Contract",
+   "id": "Contract",
+   "labels": {
+    "de": "Vertrag",
+    "en": "Contract",
+    "fr": "Contrat"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Form",
+   "id": "Form",
+   "labels": {
+    "de": "Formular",
+    "en": "Form",
+    "fr": "Formulaire"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#InsuranceDocument",
+   "id": "InsuranceDocument",
+   "labels": {
+    "de": "Versicherung",
+    "en": "Insurance",
+    "fr": "Assurance"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Invoice",
+   "id": "Invoice",
+   "labels": {
+    "de": "Rechnung",
+    "en": "Invoice",
+    "fr": "Facture"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Letter",
+   "id": "Letter",
+   "labels": {
+    "de": "Brief",
+    "en": "Letter",
+    "fr": "Lettre"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Manual",
+   "id": "Manual",
+   "labels": {
+    "de": "Anleitung",
+    "en": "Manual",
+    "fr": "Mode d'emploi"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#MedicalDocument",
+   "id": "MedicalDocument",
+   "labels": {
+    "de": "Medizinisch",
+    "en": "Medical",
+    "fr": "Médical"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Notes",
+   "id": "Notes",
+   "labels": {
+    "de": "Notizen",
+    "en": "Notes",
+    "fr": "Notes"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#OtherDocument",
+   "id": "OtherDocument",
+   "labels": {
+    "de": "Anderes Dokument",
+    "en": "Other document",
+    "fr": "Autre document"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Payslip",
+   "id": "Payslip",
+   "labels": {
+    "de": "Gehaltsabrechnung",
+    "en": "Payslip",
+    "fr": "Fiche de paie"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Presentation",
+   "id": "Presentation",
+   "labels": {
+    "de": "Präsentation",
+    "en": "Presentation",
+    "fr": "Présentation"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Receipt",
+   "id": "Receipt",
+   "labels": {
+    "de": "Quittung",
+    "en": "Receipt",
+    "fr": "Reçu"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Report",
+   "id": "Report",
+   "labels": {
+    "de": "Bericht",
+    "en": "Report",
+    "fr": "Rapport"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#ReportCard",
+   "id": "ReportCard",
+   "labels": {
+    "de": "Zeugnis",
+    "en": "Report card",
+    "fr": "Bulletin scolaire"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#SchoolWork",
+   "id": "SchoolWork",
+   "labels": {
+    "de": "Schularbeit",
+    "en": "School work",
+    "fr": "Travail scolaire"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Spreadsheet",
+   "id": "Spreadsheet",
+   "labels": {
+    "de": "Tabelle",
+    "en": "Spreadsheet",
+    "fr": "Tableur"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#TaxDocument",
+   "id": "TaxDocument",
+   "labels": {
+    "de": "Steuer",
+    "en": "Tax",
+    "fr": "Impôts"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#Warranty",
+   "id": "Warranty",
+   "labels": {
+    "de": "Garantie",
+    "en": "Warranty",
+    "fr": "Garantie"
+   },
+   "broader": null
+  }
+ ],
+ "summaryStates": [
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#SummaryDraft",
+   "id": "SummaryDraft",
+   "labels": {
+    "de": "KI-Entwurf",
+    "en": "AI draft",
+    "fr": "Brouillon IA"
+   },
+   "broader": null
+  },
+  {
+   "iri": "https://mediathek.digitalhome.cloud/ontology#SummaryChecked",
+   "id": "SummaryChecked",
+   "labels": {
+    "de": "Geprüft",
+    "en": "Checked",
+    "fr": "Vérifié"
+   },
+   "broader": null
+  }
+ ],
+ "relations": [
+  {
+   "key": "parentOf",
+   "iri": "http://purl.org/vocab/relationship/parentOf",
+   "labels": {
+    "de": "Elternteil von",
+    "en": "parent of",
+    "fr": "parent de"
+   }
+  },
+  {
+   "key": "childOf",
+   "iri": "http://purl.org/vocab/relationship/childOf",
+   "labels": {
+    "de": "Kind von",
+    "en": "child of",
+    "fr": "enfant de"
+   }
+  },
+  {
+   "key": "grandparentOf",
+   "iri": "http://purl.org/vocab/relationship/grandparentOf",
+   "labels": {
+    "de": "Großelternteil von",
+    "en": "grandparent of",
+    "fr": "grand-parent de"
+   }
+  },
+  {
+   "key": "grandchildOf",
+   "iri": "http://purl.org/vocab/relationship/grandchildOf",
+   "labels": {
+    "de": "Enkelkind von",
+    "en": "grandchild of",
+    "fr": "petit-enfant de"
+   }
+  },
+  {
+   "key": "siblingOf",
+   "iri": "http://purl.org/vocab/relationship/siblingOf",
+   "labels": {
+    "de": "Geschwister von",
+    "en": "sibling of",
+    "fr": "frère ou sœur de"
+   }
+  },
+  {
+   "key": "spouseOf",
+   "iri": "http://purl.org/vocab/relationship/spouseOf",
+   "labels": {
+    "de": "Ehepartner von",
+    "en": "spouse of",
+    "fr": "époux ou épouse de"
+   }
+  },
+  {
+   "key": "friendOf",
+   "iri": "http://purl.org/vocab/relationship/friendOf",
+   "labels": {
+    "de": "befreundet mit",
+    "en": "friend of",
+    "fr": "ami de"
+   }
+  },
+  {
+   "key": "classmateOf",
+   "iri": "https://mediathek.digitalhome.cloud/ontology#classmateOf",
+   "labels": {
+    "de": "Klassenkamerad von",
+    "en": "classmate of",
+    "fr": "camarade de classe de"
+   }
+  }
+ ]
+}
