@@ -1,6 +1,6 @@
 # ADR-0016 — Document summaries, written by the agent and checked by a person
 
-Status: **Accepted** · Date: 2026-11-07 · Concerns the edge and the cloud · Second step of the Archive (docs/ROADMAP.md) · Extended to photos and films by ADR-0017
+Status: **Accepted** · Date: 2026-11-07 · Concerns the edge and the cloud · Second step of the Archive (ROADMAP.md) · Extended to photos and films by ADR-0017
 
 ## Context
 
@@ -73,8 +73,8 @@ travel with it (tested).
 - [Summarising a document](../diagrams/adr-0016-summarise.html): who calls whom, from the selection to a checked summary.
 - [A summary's state](../diagrams/adr-0016-summary-state.html): no summary, proposed, AI draft, checked, and the two dead ends.
 
-Both are standalone HTML made with Archify from their sources in `docs/diagrams/src/`; edit a
-source and run `npm run diagrams`. All diagrams are listed in the [gallery](../diagrams/index.html).
+Both are standalone HTML made with Archify from their sources in `diagrams/src/`; edit a
+source and run `npm run diagrams`. All diagrams are listed in the [gallery](../diagrams/).
 
 ## Consequences
 

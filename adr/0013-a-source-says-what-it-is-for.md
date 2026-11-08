@@ -89,5 +89,5 @@ uploading every film of every store.
   what make that safe.
 - A role can be changed while no job runs on the source. A store keeps its
   role until it is forgotten.
-- Office documents (the Archive, `docs/ROADMAP.md`) will use the same roles
+- Office documents (the Archive, `ROADMAP.md`) will use the same roles
   when they are fingerprinted.

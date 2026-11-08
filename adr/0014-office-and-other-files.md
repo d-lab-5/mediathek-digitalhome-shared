@@ -1,6 +1,6 @@
 # ADR-0014 — Office documents and other files, kept as their original
 
-Status: **Accepted** · Date: 2026-11-06 · Concerns the edge and the cloud · First step of the Archive (docs/ROADMAP.md)
+Status: **Accepted** · Date: 2026-11-06 · Concerns the edge and the cloud · First step of the Archive (ROADMAP.md)
 
 ## Context
 

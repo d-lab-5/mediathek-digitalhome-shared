@@ -1,8 +1,8 @@
 # Roadmap
 
 What the Mediathek is meant to become, beyond what is built. An item here is
-a direction, not a promise. When work starts, it gets an ADR in `docs/adr/`,
-and its diagrams appear in the [gallery](diagrams/index.html).
+a direction, not a promise. When work starts, it gets an ADR in `adr/`,
+and its diagrams appear in the [gallery](diagrams/).
 
 ## Archive: documents that belong to the family
 
