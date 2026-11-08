@@ -10,7 +10,8 @@ Both are in private repositories for now. This one is public and holds only
 what can be: structures and decisions, never a family's data (see
 [SECURITY.md](SECURITY.md)).
 
-Read it at **https://docs.mediathek.digitalhome.cloud/**.
+Read it at **https://docs.mediathek.digitalhome.cloud/**, or with the other
+D-LAB-5 products at **https://docs.dlab5.net/digitalhome/mediathek/**.
 
 ## What is here
 
@@ -21,7 +22,8 @@ Read it at **https://docs.mediathek.digitalhome.cloud/**.
 | `diagrams/` | Archify diagrams: sources in `src/`, rendered pages beside them; [README](diagrams/README.md) |
 | `ontology/` | The T-Box, SHACL shapes and SKOS concepts, copied from the cloud |
 | `site/` | The landing page text and the stylesheet |
-| `scripts/` | `diagrams.mjs` (render and check), `site.mjs` (build the site), `check.mjs`, `sync-ontology.sh` |
+| `scripts/` | `diagrams.mjs` (render and check), `site.mjs` (build the site), `check.mjs`, `sync-ontology.sh`: from [template-dlab5-shared](https://github.com/d-lab-5/template-dlab5-shared) |
+| `shared.json` | What the scripts need to know about the Mediathek: name, domains, texts, the ontology's source |
 
 ## Working on it
 

@@ -4,10 +4,10 @@ This repository is under two licences, by what a file is.
    ROADMAP.md and the README files — are licensed under the Creative Commons
    Attribution 4.0 International licence (CC BY 4.0):
    https://creativecommons.org/licenses/by/4.0/legalcode
-   Attribute them to "D-LAB-5, the Mediathek".
+   Attribute them to "D-LAB-5, Mediathek".
 
 2. Code — everything in scripts/, site/site.css and .github/ — and the copy of
-   the ontology in ontology/ (MIT in its source, the Mediathek cloud) are
+   the ontology in ontology/, when there is one, (MIT in its source) are
    licensed under the MIT licence:
 
 MIT License

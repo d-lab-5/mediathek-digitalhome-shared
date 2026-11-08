@@ -5,18 +5,21 @@
  * Everything CI checks before the site is published, and what to run before
  * a push:
  *
- *   1. every diagram is rendered from its current source and listed once;
- *   2. the ontology parses, and the site builds;
+ *   1. shared.json is complete, and every diagram is rendered from its
+ *      current source and listed once;
+ *   2. the ontology parses (when there is one), and the site builds;
  *   3. the public sweep: this repository is public and holds only T-Box
  *      structures, decisions and diagrams. No A-Box data (instances of
  *      people, events, places), no account ids, ARNs, app or distribution
- *      hostnames, emails, keys, or local paths.
+ *      hostnames, emails, keys, or local paths; and no link to an app
+ *      repository shared.json marks private.
  *
  *   node scripts/check.mjs
  */
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { config } from "./config.mjs";
 import { REPO, problems } from "./diagrams.mjs";
 import { readOntology } from "./ontology.mjs";
 import { buildSite } from "./site.mjs";
@@ -24,14 +27,18 @@ import { buildSite } from "./site.mjs";
 const failures = [];
 const fail = (x) => failures.push(x);
 
-// 1. diagrams
+// 1. the configuration, and the diagrams
+let c = null;
+try { c = config(); } catch (e) { fail(e.message); }
 problems().forEach(fail);
 
 // 2. the ontology parses and holds no individuals but concepts; the site builds
-try {
-  const o = readOntology();
-  if (!o.classes.length) fail("ontology: no classes found");
-} catch (e) { fail(`ontology: ${e.message}`); }
+if (c?.ontology) {
+  try {
+    const o = readOntology();
+    if (!o.classes.length) fail("ontology: no classes found");
+  } catch (e) { fail(`ontology: ${e.message}`); }
+}
 try { buildSite(); } catch (e) { fail(`site: ${e.stack || e.message}`); }
 
 // 3. the public sweep, over every tracked text file
@@ -45,6 +52,10 @@ const RULES = [
   [/[A-Za-z0-9._%+-]+@(?!anthropic\.com\b)[A-Za-z0-9-]+\.[a-z]{2,}/, "an email address"],
   [/\/home\/[a-z]|C:\\Users\\/, "a local path"],
 ];
+// a private app repository is named, never linked: the link would lead nowhere, and says too much
+for (const a of c?.app_repos || []) {
+  if (a.private && a.repo) RULES.push([new RegExp(`github\\.com/${a.repo.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\w.-])`, "i"), `a link to the private repository ${a.repo}`]);
+}
 const TEXT = /\.(md|mjs|js|json|ttl|ya?ml|sh|css|txt)$|^(LICENSE|NOTICE|CNAME|\.gitignore|\.nvmrc)$/;
 for (const f of tracked.filter((f) => TEXT.test(f.split("/").pop()) && !f.startsWith("node_modules/") && f !== "package-lock.json")) {
   const text = readFileSync(join(REPO, f), "utf8");
@@ -63,4 +74,4 @@ for (const f of tracked.filter((f) => /^ontology\/.*\.ttl$/.test(f))) {
 
 failures.forEach((x) => console.error(`✗ ${x}`));
 if (failures.length) process.exit(1);
-console.log("✓ diagrams in step, ontology and site build, nothing private in the repository");
+console.log(`✓ shared.json, ${c?.ontology ? "the ontology, " : ""}diagrams in step, site builds, nothing private in the repository`);

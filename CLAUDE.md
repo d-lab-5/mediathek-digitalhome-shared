@@ -21,10 +21,14 @@ scripts/sync-ontology.sh [--check]   # the ontology copy vs ../mediathek-digital
 
 ## Things that bite
 
+0. **The scripts, site/site.css, the workflow, SECURITY.md and LICENSE come
+   from d-lab-5/template-dlab5-shared.** `copier update --trust` replaces them;
+   fix them there. `shared.json` (name, domains, texts, ontology) is this
+   repository's. The site is also built into docs.dlab5.net/digitalhome/mediathek/.
 1. **The ontology's source is in the cloud repo**, `packages/ontology`, because
    the cloud's build and backend need it there. Change it there, then run
-   `scripts/sync-ontology.sh` here. CI cannot compare the two: the cloud repo is
-   private.
+   `scripts/sync-ontology.sh` here (its source and files are in `shared.json`).
+   CI cannot compare the two: the cloud repo is private.
 2. **A diagram is listed exactly once**, in `diagrams/README.md` under a group or
    in its ADR's `## Diagrams`, as `- [Title](../diagrams/<name>.html): what it
    explains.` That line is the gallery card's text. `check` fails otherwise.
