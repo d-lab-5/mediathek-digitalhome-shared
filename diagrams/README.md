@@ -30,6 +30,9 @@ How the edge on a PC and the cloud work together.
 
 The local application: what runs on the PC, and how a person works with it.
 
+- [The edge's parts](../diagrams/edge-parts.html): the page, the web server and its job queue, the engine, the catalog and the local models, and how the chat reaches them only through the edge's own MCP server.
+- [Onboarding a drive](../diagrams/edge-onboarding.html): scan, fingerprint, move the extra copies into a bin that can be undone, check it before emptying, then keep the drive as a store that publishes what is new.
+
 ## Cloud
 
 The web application: what runs in AWS, and who may see what.

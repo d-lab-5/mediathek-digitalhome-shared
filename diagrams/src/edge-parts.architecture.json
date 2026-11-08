@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "The edge's parts",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "output": "diagrams/edge-parts.html"
+  },
+  "components": [
+    {
+      "id": "person",
+      "type": "external",
+      "label": "Person",
+      "sublabel": "in a browser",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "page",
+      "type": "frontend",
+      "label": "Edge page",
+      "sublabel": "app.js, five stages",
+      "pos": [
+        250,
+        40
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "server",
+      "type": "backend",
+      "label": "Web server",
+      "sublabel": "Flask, app.py",
+      "pos": [
+        460,
+        40
+      ],
+      "size": [
+        140,
+        64
+      ],
+      "tag": "127.0.0.1:8771"
+    },
+    {
+      "id": "jobs",
+      "type": "backend",
+      "label": "Job queue",
+      "sublabel": "one worker thread",
+      "pos": [
+        670,
+        40
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "engine",
+      "type": "backend",
+      "label": "Engine",
+      "sublabel": "inventory, publish",
+      "pos": [
+        880,
+        40
+      ],
+      "size": [
+        140,
+        64
+      ],
+      "tag": "onboard, sync"
+    },
+    {
+      "id": "cloud",
+      "type": "cloud",
+      "label": "Mediathek",
+      "sublabel": "/edge/v1, HTTPS",
+      "pos": [
+        1090,
+        40
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "mcp",
+      "type": "backend",
+      "label": "MCP server",
+      "sublabel": "mcp_server.py, stdio",
+      "pos": [
+        250,
+        190
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "claude",
+      "type": "external",
+      "label": "Claude Code",
+      "sublabel": "claude -p, own account",
+      "pos": [
+        460,
+        190
+      ],
+      "size": [
+        140,
+        64
+      ],
+      "tag": "no tools of its own"
+    },
+    {
+      "id": "catalog",
+      "type": "database",
+      "label": "Catalog",
+      "sublabel": "SQLite",
+      "pos": [
+        790,
+        190
+      ],
+      "size": [
+        140,
+        64
+      ]
+    },
+    {
+      "id": "models",
+      "type": "security",
+      "label": "Local models",
+      "sublabel": "faces, pets, looks",
+      "pos": [
+        990,
+        190
+      ],
+      "size": [
+        140,
+        64
+      ],
+      "tag": "ONNX, ffmpeg"
+    },
+    {
+      "id": "files",
+      "type": "database",
+      "label": "Workspace",
+      "sublabel": "abox, previews, work",
+      "pos": [
+        880,
+        330
+      ],
+      "size": [
+        140,
+        64
+      ]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "This PC",
+      "wraps": [
+        "page",
+        "server",
+        "jobs",
+        "engine",
+        "mcp",
+        "claude",
+        "catalog",
+        "models",
+        "files"
+      ]
+    },
+    {
+      "kind": "security-group",
+      "label": "Never uploaded",
+      "wraps": [
+        "models",
+        "files"
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "use",
+      "from": "person",
+      "to": "page",
+      "label": "opens"
+    },
+    {
+      "id": "api",
+      "from": "page",
+      "to": "server",
+      "label": "/api/…",
+      "variant": "emphasis"
+    },
+    {
+      "id": "queue",
+      "from": "server",
+      "to": "jobs",
+      "label": "queue",
+      "variant": "emphasis"
+    },
+    {
+      "id": "run",
+      "from": "jobs",
+      "to": "engine",
+      "label": "runs",
+      "variant": "emphasis"
+    },
+    {
+      "id": "call",
+      "from": "engine",
+      "to": "cloud",
+      "label": "Bearer",
+      "variant": "security"
+    },
+    {
+      "id": "spawn",
+      "from": "server",
+      "to": "claude",
+      "label": "chat"
+    },
+    {
+      "id": "tools",
+      "from": "claude",
+      "to": "mcp",
+      "label": "MCP"
+    },
+    {
+      "id": "bridge",
+      "from": "mcp",
+      "to": "server",
+      "label": "HTTP API",
+      "variant": "dashed"
+    },
+    {
+      "id": "rows",
+      "from": "engine",
+      "to": "catalog",
+      "label": "rows"
+    },
+    {
+      "id": "detect",
+      "from": "engine",
+      "to": "models",
+      "label": "detect"
+    },
+    {
+      "id": "store",
+      "from": "engine",
+      "to": "files",
+      "label": "Turtle"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "One server, one catalog",
+      "items": [
+        "The page and the chat's MCP server both go through the same HTTP API (core/mcp_bridge.py), so a change from either shows in the other",
+        "Listing, hashing, publishing and scans run as jobs, one at a time"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "What stays on the PC",
+      "items": [
+        "Face and pet crops, embeddings, look vectors and extracted text stay in the catalog and the workspace",
+        "Models run on the CPU through ONNX Runtime; first start fetches them with pinned SHA-256s",
+        "The server listens on 127.0.0.1 only"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "The chat",
+      "items": [
+        "Claude Code under the person's own claude.ai account: no API key, no shell, no files, no web",
+        "It sees only this edge's MCP tools, and every change it asks for waits for a Confirm"
+      ]
+    }
+  ]
+}
