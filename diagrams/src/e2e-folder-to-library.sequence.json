@@ -1,0 +1,257 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "From a folder to the Library",
+    "output": "diagrams/e2e-folder-to-library.html",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "participants": [
+    {
+      "id": "person",
+      "type": "external",
+      "label": "Person",
+      "sublabel": "household admin"
+    },
+    {
+      "id": "edge",
+      "type": "backend",
+      "label": "Edge",
+      "sublabel": "publish.py"
+    },
+    {
+      "id": "source",
+      "type": "database",
+      "label": "Source",
+      "sublabel": "bucket or folder"
+    },
+    {
+      "id": "media",
+      "type": "security",
+      "label": "edgeMedia",
+      "sublabel": "device token"
+    },
+    {
+      "id": "s3",
+      "type": "database",
+      "label": "Media bucket",
+      "sublabel": "originals, derived"
+    },
+    {
+      "id": "table",
+      "type": "database",
+      "label": "Asset table",
+      "sublabel": "Asset, Album rows"
+    },
+    {
+      "id": "library",
+      "type": "frontend",
+      "label": "Library",
+      "sublabel": "the web page"
+    },
+    {
+      "id": "access",
+      "type": "security",
+      "label": "mediaAccess",
+      "sublabel": "CDN policies"
+    }
+  ],
+  "segments": [
+    {
+      "from": 150,
+      "to": 273,
+      "label": "Fetch on the PC"
+    },
+    {
+      "from": 300,
+      "to": 451,
+      "label": "Upload"
+    },
+    {
+      "from": 478,
+      "to": 605,
+      "label": "Register"
+    },
+    {
+      "from": 634,
+      "to": 853,
+      "label": "View"
+    }
+  ],
+  "messages": [
+    {
+      "id": "go",
+      "from": "person",
+      "to": "edge",
+      "y": 165,
+      "label": "Publish a scope"
+    },
+    {
+      "id": "fetch",
+      "from": "edge",
+      "to": "source",
+      "y": 199,
+      "label": "stream the original"
+    },
+    {
+      "id": "bytes",
+      "from": "source",
+      "to": "edge",
+      "y": 233,
+      "label": "bytes: SHA-256 is the id",
+      "variant": "return",
+      "note": "thumb and display rendered here"
+    },
+    {
+      "id": "ask",
+      "from": "edge",
+      "to": "media",
+      "y": 315,
+      "label": "POST /media/uploads",
+      "variant": "emphasis",
+      "note": "vault must be this household's"
+    },
+    {
+      "id": "grants",
+      "from": "media",
+      "to": "edge",
+      "y": 377,
+      "label": "presigned PUTs, or exists",
+      "variant": "return"
+    },
+    {
+      "id": "put",
+      "from": "edge",
+      "to": "s3",
+      "y": 411,
+      "label": "PUT original + renditions",
+      "variant": "emphasis",
+      "note": "S3 checks x-amz-checksum-sha256"
+    },
+    {
+      "id": "reg",
+      "from": "edge",
+      "to": "media",
+      "y": 493,
+      "label": "POST /media/items"
+    },
+    {
+      "id": "head",
+      "from": "media",
+      "to": "s3",
+      "y": 527,
+      "label": "stored checksum = id?",
+      "variant": "security"
+    },
+    {
+      "id": "row",
+      "from": "media",
+      "to": "table",
+      "y": 561,
+      "label": "Asset, Album per folder, entries"
+    },
+    {
+      "id": "ok",
+      "from": "media",
+      "to": "edge",
+      "y": 595,
+      "label": "created, albums linked",
+      "variant": "return"
+    },
+    {
+      "id": "open",
+      "from": "person",
+      "to": "library",
+      "y": 649,
+      "label": "open the Library"
+    },
+    {
+      "id": "policy",
+      "from": "library",
+      "to": "access",
+      "y": 683,
+      "label": "mediaPolicy",
+      "variant": "security"
+    },
+    {
+      "id": "signed",
+      "from": "access",
+      "to": "library",
+      "y": 717,
+      "label": "a signed policy per readable vault",
+      "variant": "return",
+      "note": "six hours; operators see nothing"
+    },
+    {
+      "id": "list",
+      "from": "library",
+      "to": "table",
+      "y": 779,
+      "label": "listAssets(vault)"
+    },
+    {
+      "id": "cdn",
+      "from": "library",
+      "to": "s3",
+      "y": 813,
+      "label": "thumbnails from derived/<vault>/",
+      "variant": "dashed",
+      "note": "through CloudFront"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "edge",
+      "from": 160,
+      "to": 600,
+      "type": "backend"
+    },
+    {
+      "participant": "media",
+      "from": 310,
+      "to": 600,
+      "type": "security"
+    },
+    {
+      "participant": "library",
+      "from": 644,
+      "to": 818,
+      "type": "frontend"
+    },
+    {
+      "participant": "access",
+      "from": 678,
+      "to": 722,
+      "type": "security"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Identity is the content",
+      "items": [
+        "An item's id is its SHA-256, computed while the original streams",
+        "One original per household; derived files per vault, so the CDN policy can be per vault",
+        "A file already in the bucket is not uploaded again"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "The edge cannot lie",
+      "items": [
+        "Each PUT is bound to the hash it claimed",
+        "/items checks the stored checksum before it writes a row",
+        "Vaults outside the edge's household are refused"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Office and other files",
+      "items": [
+        "Kept as their original only: nothing rendered, nothing read from inside",
+        "They reach the Library as files to download, through a five-minute link"
+      ]
+    }
+  ]
+}

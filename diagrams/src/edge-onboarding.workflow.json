@@ -1,0 +1,259 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Onboarding a drive",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "output": "diagrams/edge-onboarding.html"
+  },
+  "lanes": [
+    {
+      "id": "you",
+      "label": "You"
+    },
+    {
+      "id": "edge",
+      "label": "Edge"
+    },
+    {
+      "id": "drive",
+      "label": "The drive"
+    },
+    {
+      "id": "cloud",
+      "label": "Mediathek"
+    }
+  ],
+  "phases": [
+    {
+      "id": "look",
+      "label": "Look",
+      "fromCol": 0,
+      "toCol": 1
+    },
+    {
+      "id": "clean",
+      "label": "Clean up",
+      "fromCol": 2,
+      "toCol": 4,
+      "variant": "emphasis"
+    },
+    {
+      "id": "keep",
+      "label": "Keep",
+      "fromCol": 5,
+      "toCol": 5
+    }
+  ],
+  "mainPath": [
+    "start",
+    "scan",
+    "plan",
+    "tick",
+    "move",
+    "store",
+    "publish"
+  ],
+  "nodes": [
+    {
+      "id": "start",
+      "lane": "you",
+      "col": 0,
+      "type": "external",
+      "label": "Onboard a drive",
+      "sublabel": "a local folder"
+    },
+    {
+      "id": "scan",
+      "lane": "edge",
+      "col": 1,
+      "type": "backend",
+      "label": "Scan, fingerprint",
+      "sublabel": "list, then SHA-256 each",
+      "tag": "nothing moved"
+    },
+    {
+      "id": "plan",
+      "lane": "edge",
+      "col": 2,
+      "type": "backend",
+      "label": "Plan the clean",
+      "sublabel": "which copies are extra"
+    },
+    {
+      "id": "tick",
+      "lane": "you",
+      "col": 2,
+      "type": "security",
+      "label": "Choose",
+      "sublabel": "look-alikes you tick"
+    },
+    {
+      "id": "move",
+      "lane": "drive",
+      "col": 3,
+      "type": "backend",
+      "label": "Move to the bin",
+      "sublabel": "_mediathek-bin/<run>/",
+      "tag": "logged"
+    },
+    {
+      "id": "undo",
+      "lane": "you",
+      "col": 3,
+      "type": "external",
+      "label": "Undo a run",
+      "sublabel": "files go back"
+    },
+    {
+      "id": "check",
+      "lane": "you",
+      "col": 4,
+      "type": "security",
+      "label": "Check the bin",
+      "sublabel": "every keeper still there"
+    },
+    {
+      "id": "empty",
+      "lane": "drive",
+      "col": 4,
+      "type": "database",
+      "label": "Empty the bin",
+      "sublabel": "the only deletion"
+    },
+    {
+      "id": "store",
+      "lane": "edge",
+      "col": 4,
+      "type": "backend",
+      "label": "Make it a store",
+      "sublabel": "vault, marker file"
+    },
+    {
+      "id": "publish",
+      "lane": "cloud",
+      "col": 5,
+      "type": "cloud",
+      "label": "Publish what's new",
+      "sublabel": "to the store's vault"
+    },
+    {
+      "id": "sync",
+      "lane": "edge",
+      "col": 5,
+      "type": "backend",
+      "label": "Keep in step",
+      "sublabel": "new files, new copies"
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "from": "start",
+      "to": "scan",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e3",
+      "from": "scan",
+      "to": "plan",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e4",
+      "from": "plan",
+      "to": "tick",
+      "variant": "security",
+      "label": "extra copies"
+    },
+    {
+      "id": "e5",
+      "from": "tick",
+      "to": "move",
+      "variant": "emphasis",
+      "label": "re-read first"
+    },
+    {
+      "id": "e6",
+      "from": "move",
+      "to": "undo",
+      "variant": "default",
+      "label": "undo",
+      "role": "branch"
+    },
+    {
+      "id": "e7",
+      "from": "move",
+      "to": "check",
+      "variant": "security",
+      "label": "before emptying",
+      "role": "branch"
+    },
+    {
+      "id": "e8",
+      "from": "check",
+      "to": "empty",
+      "variant": "security",
+      "label": "you ask"
+    },
+    {
+      "id": "e9",
+      "from": "move",
+      "to": "store",
+      "variant": "emphasis"
+    },
+    {
+      "id": "e10",
+      "from": "store",
+      "to": "publish",
+      "variant": "emphasis",
+      "label": "when linked"
+    },
+    {
+      "id": "e11",
+      "from": "store",
+      "to": "sync",
+      "variant": "dashed",
+      "label": "later",
+      "role": "async"
+    },
+    {
+      "id": "e12",
+      "from": "sync",
+      "to": "publish",
+      "variant": "dashed",
+      "label": "the rest",
+      "role": "async"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "What counts as an extra copy",
+      "items": [
+        "Exact: the same fingerprint twice on this drive; one stays",
+        "In a store: kept in another store, binned here",
+        "In the Mediathek: offered while onboarding only, never by default",
+        "Look-alikes: re-saved or shrunk pictures, only the ones you tick"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Nothing is lost",
+      "items": [
+        "Before each move the file is read again and must still match the plan, and its keeper must still be there",
+        "Moves are logged per run, so a run can be undone",
+        "Emptying the bin is the only deletion the edge makes, and only when you ask"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Only local folders",
+      "items": [
+        "An S3 bucket, a ZIP or a Takeout export stays read-only",
+        "A store is found again under another mount path by its marker file"
+      ]
+    }
+  ]
+}

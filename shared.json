@@ -1,0 +1,42 @@
+{
+  "product": "Mediathek",
+  "slug": "mediathek",
+  "domain": "digitalhome",
+  "description": "A family media library: a local edge application and a web library, with the people, pets, places and events the photos and films belong to.",
+  "repo": "d-lab-5/mediathek-digitalhome-shared",
+  "own_domain": "docs.mediathek.digitalhome.cloud",
+  "app_repos": [
+    {
+      "private": true,
+      "repo": "d-lab-5/mediathek-digitalhome-edge"
+    },
+    {
+      "private": true,
+      "repo": "d-lab-5/mediathek-digitalhome-cloud"
+    }
+  ],
+  "languages": [
+    "en",
+    "de",
+    "fr"
+  ],
+  "ontology": {
+    "files": [
+      "tbox/mediathek.ttl",
+      "tbox/mediathek-concepts.ttl",
+      "shapes/mediathek-shapes.ttl",
+      "concepts.json"
+    ],
+    "source": "../mediathek-digitalhome-cloud/packages/ontology"
+  },
+  "texts": {
+    "footer": "The Mediathek by D-LAB-5",
+    "diagrams": "how the edge and the cloud work together, each application on its own, the models, and the decisions that needed a picture",
+    "decisions": "Architecture Decision Records: what was decided for the Mediathek, why, and what follows from it. A decision is not edited once accepted; a later one extends or replaces it.",
+    "ontology_title": "The Mediathek ontology",
+    "ontology_scope": "The T-Box only: it defines kinds of things and how they relate, and holds no family's data. Each vault's A-Box, the actual people, events and places, lives in the Mediathek and is never published here.",
+    "borrowed": "Terms from standard vocabularies, and what they mean in the Mediathek.",
+    "shapes": "What the cloud checks on every save of an A-Box; a save that breaks one is refused with the message shown.",
+    "concepts": "The fixed vocabularies a person picks from. English is the master; German and French are shown to people who chose them."
+  }
+}

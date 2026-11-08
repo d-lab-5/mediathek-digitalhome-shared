@@ -1,17 +1,18 @@
 // SPDX-License-Identifier: MIT
 // Copyright (C) 2026 D-LAB-5
 /**
- * The Mediathek T-Box as a readable reference: classes, properties, the terms
+ * A product's T-Box as a readable reference: classes, properties, the terms
  * borrowed from standard vocabularies, the SHACL rules an A-Box must keep, and
- * the SKOS concept schemes in en/de/fr. Read from ontology/ (a copy of the
- * cloud's packages/ontology, see scripts/sync-ontology.sh) with N3.
+ * the SKOS concept schemes in the languages shared.json names. Read from
+ * ontology/ (a copy of the app repository's, see scripts/sync-ontology.sh)
+ * with N3. Only when shared.json has an "ontology".
  *
  *   import { readOntology, ontologyHtml } from "./ontology.mjs";
  */
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import N3 from "n3";
-import { REPO } from "./diagrams.mjs";
+import { REPO, config } from "./config.mjs";
 
 export const ONTOLOGY = join(REPO, "ontology");
 const RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
@@ -20,7 +21,6 @@ const OWL = "http://www.w3.org/2002/07/owl#";
 const SH = "http://www.w3.org/ns/shacl#";
 const SKOS = "http://www.w3.org/2004/02/skos/core#";
 const DCT = "http://purl.org/dc/terms/";
-const LANGS = ["en", "de", "fr"];
 
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
@@ -28,6 +28,7 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "
 export function turtleFiles() {
   const out = [];
   for (const dir of ["tbox", "shapes"]) {
+    if (!existsSync(join(ONTOLOGY, dir))) continue;
     for (const f of readdirSync(join(ONTOLOGY, dir)).filter((f) => f.endsWith(".ttl")).sort()) out.push(`${dir}/${f}`);
   }
   return out;
@@ -143,12 +144,13 @@ export function readOntology() {
   return { meta, prefixes, classes, properties, borrowed, shapes, schemes, files: turtleFiles() };
 }
 
-const names = (l) => LANGS.map((g) => `<td lang="${g}">${esc(l[g] || "")}</td>`).join("");
+const names = (l) => config().languages.map((g) => `<td lang="${g}">${esc(l[g] || "")}</td>`).join("");
 const anchor = (name) => name.replace(/[^A-Za-z0-9]+/g, "-");
 
 /** The reference page's body. */
 export function ontologyHtml(o) {
-  const head = `<tr><th>Term</th><th>en</th><th>de</th><th>fr</th></tr>`;
+  const t = config().texts;
+  const head = `<tr><th>Term</th>${config().languages.map((g) => `<th>${esc(g)}</th>`).join("")}</tr>`;
   const classes = o.classes.map((c) => `<tr id="${anchor(c.name)}"><td><code>${esc(c.name)}</code>${
     c.parents.length ? `<br><small>is a ${c.parents.map((p) => `<code>${esc(p)}</code>`).join(", ")}</small>` : ""}${
     c.union.length ? `<br><small>one of ${c.union.map((p) => `<code>${esc(p)}</code>`).join(", ")}</small>` : ""}${
@@ -170,12 +172,12 @@ export function ontologyHtml(o) {
 <p class="lead">${esc(o.meta.description || "")}</p>
 <p class="meta">Version ${esc(o.meta.version || "—")} · <code>${esc(o.meta.iri || "")}</code> · ${o.classes.length} classes, ${o.properties.length} properties, ${o.shapes.length} shapes, ${o.schemes.length} concept schemes ·
   Turtle: ${o.files.map((f) => `<a href="${esc(f)}">${esc(f)}</a>`).join(", ")}</p>
-<p>The T-Box only: it defines kinds of things and how they relate, and holds no family's data. Each vault's A-Box, the actual people, events and places, lives in the Mediathek and is never published here.</p>
+<p>${esc(t.ontology_scope)}</p>
 <nav class="toc"><a href="#classes">Classes</a><a href="#properties">Properties</a><a href="#borrowed">Borrowed terms</a><a href="#shapes">Rules (SHACL)</a><a href="#concepts">Concepts (SKOS)</a><a href="#prefixes">Prefixes</a></nav>
 <h2 id="classes">Classes</h2><table>${head}${classes}</table>
 <h2 id="properties">Properties</h2><table>${head}${props}</table>
-<h2 id="borrowed">Borrowed terms</h2><p>Terms from standard vocabularies, and what they mean in the Mediathek.</p><table>${head}${borrowed}</table>
-<h2 id="shapes">Rules (SHACL)</h2><p>What the cloud checks on every save of an A-Box; a save that breaks one is refused with the message shown.</p>${shapes}
-<h2 id="concepts">Concepts (SKOS)</h2><p>The fixed vocabularies a person picks from. English is the master; German and French are shown to people who chose them.</p>${schemes}
+<h2 id="borrowed">Borrowed terms</h2><p>${esc(t.borrowed)}</p><table>${head}${borrowed}</table>
+<h2 id="shapes">Rules (SHACL)</h2><p>${esc(t.shapes)}</p>${shapes}
+<h2 id="concepts">Concepts (SKOS)</h2><p>${esc(t.concepts)}</p>${schemes}
 <h2 id="prefixes">Prefixes</h2><table>${prefixes}</table>`;
 }

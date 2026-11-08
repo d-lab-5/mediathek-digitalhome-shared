@@ -1,0 +1,144 @@
+{
+  "schema_version": 3,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "A chat proposal",
+    "output": "diagrams/e2e-chat-proposal.html",
+    "locale": "en",
+    "quality_profile": "showcase"
+  },
+  "mainPath": [
+    "asked",
+    "waiting",
+    "confirmed",
+    "done"
+  ],
+  "states": [
+    {
+      "id": "asked",
+      "type": "start",
+      "label": "Asked for",
+      "sublabel": "a tool that changes something",
+      "tag": "act()",
+      "step": "01"
+    },
+    {
+      "id": "waiting",
+      "type": "waiting",
+      "label": "Waiting",
+      "sublabel": "a card in the chat panel",
+      "tag": "kept across a restart",
+      "step": "02"
+    },
+    {
+      "id": "confirmed",
+      "type": "decision",
+      "label": "Confirmed",
+      "sublabel": "the edge runs the one call",
+      "tag": "the person's click",
+      "step": "03"
+    },
+    {
+      "id": "done",
+      "type": "success",
+      "label": "Ran",
+      "sublabel": "the call answered 2xx",
+      "tag": "told to the chat",
+      "step": "04"
+    },
+    {
+      "id": "failed",
+      "type": "failure",
+      "label": "Failed",
+      "sublabel": "the reason, in a line",
+      "tag": "told to the chat"
+    },
+    {
+      "id": "dismissed",
+      "type": "neutral",
+      "label": "Dismissed",
+      "sublabel": "nothing ran",
+      "tag": "told to the chat"
+    },
+    {
+      "id": "refused",
+      "type": "failure",
+      "label": "Refused",
+      "sublabel": "not an allowed call",
+      "tag": "never stored"
+    }
+  ],
+  "transitions": [
+    {
+      "id": "propose",
+      "from": "asked",
+      "to": "waiting",
+      "label": "POST /api/chat/proposals"
+    },
+    {
+      "id": "refuse",
+      "from": "asked",
+      "to": "refused",
+      "label": "not in ALLOWED",
+      "variant": "security"
+    },
+    {
+      "id": "confirm",
+      "from": "waiting",
+      "to": "confirmed",
+      "label": "Confirm",
+      "variant": "emphasis"
+    },
+    {
+      "id": "dismiss",
+      "from": "waiting",
+      "to": "dismissed",
+      "label": "Dismiss"
+    },
+    {
+      "id": "ran",
+      "from": "confirmed",
+      "to": "done",
+      "label": "2xx"
+    },
+    {
+      "id": "fail",
+      "from": "confirmed",
+      "to": "failed",
+      "label": "error"
+    },
+    {
+      "id": "again",
+      "from": "failed",
+      "to": "asked",
+      "label": "proposed again, fixed",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "A person decides",
+      "items": [
+        "The chat's MCP server runs in panel mode: a change answers 'proposed', never 'done'",
+        "Only calls from a fixed list of this edge's own API can be proposed, and a proposal read back from disk is checked against it again"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "The chat hears back",
+      "items": [
+        "Decisions reach the chat as one line before the person's next message",
+        "proposals() lists every proposal and what became of it, so the chat never asks twice"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "No stale clicks",
+      "items": [
+        "Ids carry this run of the edge: a card left from before a restart cannot confirm a newer proposal",
+        "A proposal is decided once"
+      ]
+    }
+  ]
+}

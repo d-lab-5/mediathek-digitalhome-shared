@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 // Copyright (C) 2026 D-LAB-5
 /**
- * The Mediathek's diagrams: render them with Archify, check they are in step,
+ * A product's diagrams: render them with Archify, check they are in step,
  * and describe them for the site's gallery (scripts/site.mjs).
  *
  *   node scripts/diagrams.mjs build [name ...] [--all]   render what changed (needs Archify)
@@ -14,8 +14,7 @@
  *   diagrams/src/rendered.json        which source each page was rendered from
  *
  * Every diagram is listed once, with what it explains:
- *   - in diagrams/README.md under one of its "## <group>" headings
- *     (End to end, Edge, Cloud, Models), or
+ *   - in diagrams/README.md under one of its "## <group>" headings, or
  *   - in the ADR it belongs to, under "## Diagrams".
  * Each line reads `- [Title](../diagrams/<name>.html): what it explains.` and
  * is the gallery card's text, so it is written once.
@@ -29,10 +28,11 @@ import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { homedir } from "node:os";
-import { dirname, join, relative } from "node:path";
+import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+import { REPO } from "./config.mjs";
 
-export const REPO = join(dirname(fileURLToPath(import.meta.url)), "..");
+export { REPO };
 export const DIR = join(REPO, "diagrams");
 const SRC = join(DIR, "src");
 const ADRS = join(REPO, "adr");
@@ -52,6 +52,7 @@ const rel = (p) => relative(REPO, p).split("\\").join("/");
 
 /** Every source: {name, type, file, page, data}. */
 export function sources() {
+  if (!existsSync(SRC)) return [];
   return readdirSync(SRC).filter((f) => NAME.test(f)).sort().map((f) => {
     const [, name, type] = f.match(NAME);
     const data = JSON.parse(read(join(SRC, f)));
@@ -68,6 +69,7 @@ function links(section) {
 
 /** The ADRs: {file, stem, num, heading, status, context, links}. */
 export function adrs() {
+  if (!existsSync(ADRS)) return [];
   return readdirSync(ADRS).filter((f) => /^\d{4}-.*\.md$/.test(f)).sort().map((f) => {
     const text = read(join(ADRS, f));
     const heading = (text.match(/^#\s+(.+)$/m) || [, f])[1];
@@ -161,7 +163,7 @@ export function problems() {
     else if (done[s.name]?.source !== sha(s.file)) out.push(`${s.name}: the source changed since the page was rendered (npm run diagrams)`);
     else if (done[s.name]?.page !== sha(s.page)) out.push(`${s.name}: the page was changed by hand; edit the source and render it`);
   }
-  for (const f of readdirSync(DIR).filter((f) => f.endsWith(".html"))) {
+  for (const f of existsSync(DIR) ? readdirSync(DIR).filter((f) => f.endsWith(".html")) : []) {
     if (!names.has(f.slice(0, -5))) out.push(`diagrams/${f}: a page without a source in diagrams/src`);
   }
   const seen = new Map();

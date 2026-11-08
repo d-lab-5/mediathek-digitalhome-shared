@@ -1,8 +1,8 @@
 {
-  "name": "@dlab5/mediathek-shared",
+  "name": "@dlab5/shared-docs",
   "version": "1.0.0",
   "private": true,
-  "description": "The Mediathek's shared documentation: decisions, roadmap, diagrams and the ontology reference, published at docs.mediathek.digitalhome.cloud",
+  "description": "A D-LAB-5 product's shared documentation: decisions, roadmap, diagrams and ontology reference (template-dlab5-shared)",
   "type": "module",
   "license": "MIT AND CC-BY-4.0",
   "scripts": {

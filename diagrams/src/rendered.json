@@ -11,6 +11,30 @@
     "source": "e38f13bf16a893bedddb63a696ba56d71de69f9fc24bceb695d9c7a387c0a454",
     "page": "f845f6ae68b2b3635199b6b2e0c5d09fe97d0fa9ec6099ea0e9278c58d8cba45"
   },
+  "e2e-chat-proposal": {
+    "source": "b38c29f98a05b4d0d0e4980deb9a2b7da70b481c7176e7d86f337b3e7e3c7661",
+    "page": "a2f17644953537caf6323217e4c06dc57810c60017cdfa42851452a9a804f2ec"
+  },
+  "e2e-folder-to-library": {
+    "source": "de2baaf04e7c99271b0eb6d635165afb3de524231bab8b0baeaf9a683cb57dcb",
+    "page": "7d9c9d9ff29cce0fbb6d247e967260ed028df4942a8352a28ee043c5dd143afc"
+  },
+  "e2e-knowledge-sync": {
+    "source": "67df2db0f4089e30643e9c9cb6d165d9d13fa95b7cd993213b6a779cd9225fed",
+    "page": "8eaca8db6ea0652a994faaa5ed9ba5c771b39ffddf15f70dff8aac9ceb188da0"
+  },
+  "e2e-link-edge": {
+    "source": "a874914d17907025c7ab99e79af5b31099c2a127c59bfa0c8ce911a678893f36",
+    "page": "c28176c4f10e4ad53a0f513c1a1c6bc97beecf107a9e05236ce22d15daf37517"
+  },
+  "edge-onboarding": {
+    "source": "cbe16f5c54be340edd763dfb36d2e9675c94eb1a1a84544e9b1e0677c16aad56",
+    "page": "46a1f5db20ddec01c0e3afc109936f1959f4c50f05f8a026ca44f755614630b0"
+  },
+  "edge-parts": {
+    "source": "8a82de618425e738ee3343910993e1df5629b5e3067e3287ce2a4402d4d4d7e5",
+    "page": "46ca199daceb04a3eceaadad1f52d9cb6c516ce92a4a747d01012b7be75a6e2b"
+  },
   "overview-data-model": {
     "source": "667c851d1277d9a7b181c9193a0e4d10afeca24e8946bd342ed3f21513106d78",
     "page": "a5a556a54c65d448b889affd040116d8875af5ec846523a39ad14dd80256d965"

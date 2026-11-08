@@ -1,4 +1,5 @@
-/* Mediathek docs: one stylesheet, dark first, light on request of the system. */
+/* D-LAB-5 docs: one stylesheet for every product and for docs.dlab5.net, dark
+   first, light on request of the system. Owned by template-dlab5-shared. */
 :root {
   --bg: #0f1420; --panel: #171e2e; --panel-2: #1e2738; --text: #e7ebf3; --muted: #9ba6bd;
   --line: #2a3449; --accent: #5eb3f6; --on-accent: #0f1420; --code: #c9d6ee;

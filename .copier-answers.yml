@@ -1,0 +1,17 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: b21e643
+_src_path: gh:d-lab-5/template-dlab5-shared
+app_repos: d-lab-5/mediathek-digitalhome-edge*, d-lab-5/mediathek-digitalhome-cloud*
+description: 'A family media library: a local edge application and a web library,
+    with the people, pets, places and events the photos and films belong to.'
+diagram_groups: End to end, Edge, Cloud, Models
+domain: digitalhome
+languages: en, de, fr
+ontology: true
+ontology_files: tbox/mediathek.ttl, tbox/mediathek-concepts.ttl, shapes/mediathek-shapes.ttl,
+    concepts.json
+ontology_source: ../mediathek-digitalhome-cloud/packages/ontology
+own_domain: docs.mediathek.digitalhome.cloud
+product: Mediathek
+repo: d-lab-5/mediathek-digitalhome-shared
+slug: mediathek
