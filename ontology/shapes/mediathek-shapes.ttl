@@ -135,6 +135,26 @@ mtsh:EventShape a sh:NodeShape ;
     sh:property [ sh:path schema:superEvent ; sh:class mt:Event ; sh:message "An event is part of another event."@en ] ;
     sh:property [ sh:path mt:lifeArea ; sh:node mtsh:InLifeAreas ; sh:message "Life areas come from mt:LifeAreas."@en ] .
 
+# ----------------------------------------------------------------- albums --
+
+mtsh:AlbumShape a sh:NodeShape ;
+    sh:targetClass mt:Album ;
+    sh:property [
+        sh:path schema:name ; sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "An album has one name, e.g. \"Paris, October 2019\"."@en ;
+    ] ;
+    sh:property [
+        sh:path skos:prefLabel ; sh:uniqueLang true ; sh:datatype rdf:langString ;
+        sh:message "A name's translations: at most one per language, each with its language tag."@en ;
+    ] ;
+    sh:property [ sh:path schema:description ; sh:maxCount 1 ; sh:message "An album has at most one description."@en ] ;
+    sh:property [
+        sh:path mt:cover ; sh:maxCount 1 ;
+        sh:node [ sh:property [ sh:path mt:sha256 ; sh:minCount 1 ] ] ;     # an item: photos, films and files alike
+        sh:message "An album's cover is one item (with its mt:sha256)."@en ;
+    ] ;
+    sh:property [ sh:path mt:fromFolder ; sh:datatype xsd:string ] .
+
 # ----------------------------------------------------------------- places --
 
 mtsh:PlaceShape a sh:NodeShape ;
@@ -162,6 +182,7 @@ mtsh:ItemShape a sh:NodeShape ;
         sh:message "A photo shows persons and pets."@en ;
     ] ;
     sh:property [ sh:path mt:ofEvent ; sh:class mt:Event ; sh:message "An item is taken at an event."@en ] ;
+    sh:property [ sh:path mt:inAlbum ; sh:class mt:Album ; sh:message "An item is in an album (mt:Album)."@en ] ;
     sh:property [
         sh:path mt:year ; sh:maxCount 1 ; sh:datatype xsd:gYear ;
         sh:message "An item has at most one year set by hand, a year such as \"1987\"^^xsd:gYear."@en ;

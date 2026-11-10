@@ -78,7 +78,8 @@ mt:summaryState a owl:ObjectProperty , owl:FunctionalProperty ;
 
 mt:Album a owl:Class ;
     rdfs:subClassOf schema:Collection ;
-    rdfs:label "Album"@en , "Album"@de , "Album"@fr .
+    rdfs:label "Album"@en , "Album"@de , "Album"@fr ;
+    rdfs:comment "Items someone put together and named (ADR-0018). Not a folder: where a file was found is provenance, and a folder becomes an album only when a person makes one of it."@en .
 
 mt:sha256 a owl:DatatypeProperty , owl:FunctionalProperty ;
     rdfs:domain mt:Item ; rdfs:range xsd:string ;
@@ -88,6 +89,16 @@ mt:sha256 a owl:DatatypeProperty , owl:FunctionalProperty ;
 mt:inAlbum a owl:ObjectProperty ;
     rdfs:domain mt:Item ; rdfs:range mt:Album ;
     rdfs:label "in album"@en , "im Album"@de , "dans l'album"@fr .
+
+mt:cover a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:domain mt:Album ; rdfs:range mt:Item ;
+    rdfs:label "cover"@en , "Titelbild"@de , "couverture"@fr ;
+    rdfs:comment "The item an album is shown with."@en .
+
+mt:fromFolder a owl:DatatypeProperty ;
+    rdfs:domain mt:Album ; rdfs:range xsd:string ;
+    rdfs:label "made from folder"@en , "aus Ordner"@de , "créé depuis le dossier"@fr ;
+    rdfs:comment "A folder path (inside its source) the album was made from, so the suggestion to make it is not repeated."@en .
 
 mt:ofEvent a owl:ObjectProperty ;
     rdfs:subPropertyOf schema:about ;
